@@ -70,13 +70,8 @@ const VideoPanels: React.FC<VideoPanelsProps> = ({
             />
             
             <VideoControls 
-              hasMicPermission={hasMicPermission}
-              isMicEnabled={isMicEnabled}
-              isCameraEnabled={isCameraEnabled}
               audioLevel={audioLevel}
-              onToggleMicrophone={toggleMicrophone}
-              onToggleCamera={onToggleCamera || (() => {})}
-              onRequestMicPermission={requestMicPermission}
+              enabled={hasMicPermission === true && isMicEnabled}
             />
           </div>
         </CardContent>
