@@ -19,16 +19,16 @@ const TranscriptionPanel: React.FC<TranscriptionPanelProps> = ({
 }) => {
   return (
     <Card className="h-full glass-panel bg-zinc-950 border-zinc-800 shadow-md">
-      <CardHeader className="pb-0 px-4 pt-4">
-        <CardTitle className="text-xl font-semibold text-zinc-100">
+      <CardHeader className="pb-0 px-4 pt-3">
+        <CardTitle className="text-lg font-semibold text-zinc-100">
           Conversation
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col h-[calc(100%-4rem)] pt-3 px-4">
-        <div className="flex-grow overflow-y-auto pr-2 space-y-3">
+      <CardContent className="flex flex-col h-[calc(100%-3.5rem)] pt-3 px-4">
+        <div className="flex-grow overflow-y-auto pr-2 space-y-2">
           <Transcription transcripts={transcripts} keywords={keywords} />
         </div>
-        <div className="flex justify-end pt-3">
+        <div className="flex justify-end pt-2">
           <Button 
             onClick={onNext} 
             className="bg-purple-600 hover:bg-purple-700 text-zinc-100"

@@ -25,9 +25,10 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
   
   const { setupAudioAnalyzer } = useAudioAnalyzer(mediaStreamRef.current, onAudioLevelChange);
 
-  // Initialize isMicEnabled state before passing it to other hooks
+  // Initialize state before passing it to other hooks
   const [isMicEnabled, setIsMicEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCameraActive, setIsCameraActive] = useState(true);
 
   const {
     isRequestingPermission,
@@ -77,6 +78,48 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
     }
   };
 
+  // Improved camera toggle function that properly handles camera state
+  const toggleCamera = async () => {
+    console.log("Toggle camera requested, current active state:", isCameraActive);
+    
+    // If camera is currently active, we just need to disable it
+    if (isCameraActive) {
+      setIsCameraActive(false);
+      
+      // If we have video tracks, disable them instead of stopping
+      if (mediaStreamRef.current) {
+        const videoTracks = mediaStreamRef.current.getVideoTracks();
+        if (videoTracks.length > 0) {
+          videoTracks.forEach(track => {
+            track.enabled = false;
+          });
+          console.log("Camera tracks disabled");
+        }
+      }
+      return;
+    }
+    
+    // If camera is currently inactive, we need to enable it or request permission
+    try {
+      if (!mediaStreamRef.current || mediaStreamRef.current.getVideoTracks().length === 0) {
+        console.log("No video stream, requesting camera permission");
+        await requestVideoPermission();
+        setIsCameraActive(true);
+      } else {
+        // Enable existing video tracks
+        const videoTracks = mediaStreamRef.current.getVideoTracks();
+        videoTracks.forEach(track => {
+          track.enabled = true;
+        });
+        setIsCameraActive(true);
+        console.log("Camera tracks enabled");
+      }
+    } catch (error) {
+      console.error("Failed to toggle camera:", error);
+      toast.error("Failed to enable camera");
+    }
+  };
+
   // Automatically request permissions when component mounts
   useEffect(() => {
     console.log("useMediaHandler mounted, requesting permissions");
@@ -101,11 +144,13 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
     hasMicPermission,
     isRequestingPermission,
     isMicEnabled,
+    isCameraActive,
     isLoading,
     videoRef,
     requestMediaPermissions,
     requestVideoPermission,
     requestMicPermission: requestMicPermissionInternal,
-    toggleMicrophone
+    toggleMicrophone,
+    toggleCamera
   };
 }

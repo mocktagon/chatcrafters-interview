@@ -26,8 +26,9 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ flags }) => {
         </div>,
         {
           duration: 5000,
-          position: "bottom-right",
-          className: `border-l-4 border-${severityColor}-500`
+          position: "bottom-left",
+          className: `border-l-4 border-${severityColor}-500`,
+          dismissible: true,
         }
       );
     };

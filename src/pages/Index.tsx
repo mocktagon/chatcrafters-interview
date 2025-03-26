@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import TopBar from '@/components/TopBar';
 import VideoPanels from '@/components/VideoPanels';
@@ -9,7 +10,6 @@ import { useMediaHandler } from '@/hooks/useMediaHandler';
 import { toast } from 'sonner';
 
 const Index = () => {
-  const [isCameraEnabled, setIsCameraEnabled] = useState(true);
   const [interviewName] = useState("MBA Mock Interview L2");
 
   const {
@@ -31,21 +31,16 @@ const Index = () => {
   const {
     hasMicPermission,
     isMicEnabled,
-    toggleMicrophone
+    isCameraActive,
+    toggleMicrophone,
+    toggleCamera
   } = useMediaHandler(handleAudioLevelChange);
 
-  const handleToggleMic = () => {
-    toggleMicrophone();
-  };
-
-  const handleToggleCamera = () => {
-    setIsCameraEnabled(!isCameraEnabled);
-  };
-  
   const handleNext = () => {
     toast.info("Moving to next question", {
       description: "AI will provide the next question in the interview sequence.",
-      position: "bottom-right"
+      position: "bottom-right",
+      duration: 5000,
     });
     
     // This would typically trigger the next AI question
@@ -56,15 +51,15 @@ const Index = () => {
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 text-white pb-16">
       <TopBar timer={timer} progress={progress} interviewName={interviewName} />
       
-      <div className="flex-grow p-4 grid grid-cols-12 gap-4">
+      <div className="flex-grow p-3 grid grid-cols-12 gap-3">
         <div className="col-span-4">
           <VideoPanels 
             isRunning={isRunning} 
             progress={progress} 
             audioLevel={audioLevel}
             onAudioLevelChange={handleAudioLevelChange}
-            isCameraEnabled={isCameraEnabled}
-            onToggleCamera={handleToggleCamera}
+            isCameraEnabled={isCameraActive}
+            onToggleCamera={toggleCamera}
           />
         </div>
         
@@ -81,9 +76,9 @@ const Index = () => {
         isRunning={isRunning}
         audioLevel={audioLevel}
         isMicEnabled={isMicEnabled}
-        isCameraEnabled={isCameraEnabled}
-        onToggleMic={handleToggleMic}
-        onToggleCamera={handleToggleCamera}
+        isCameraEnabled={isCameraActive}
+        onToggleMic={toggleMicrophone}
+        onToggleCamera={toggleCamera}
         onEnd={handleEnd}
       />
       

@@ -28,7 +28,8 @@ const BottomPanel: React.FC<BottomPanelProps> = ({
     onEnd();
     toast.info("Interview ended", {
       description: "The interview has been successfully ended.",
-      position: "bottom-right"
+      position: "bottom-right",
+      duration: 5000,
     });
   };
   
@@ -38,13 +39,12 @@ const BottomPanel: React.FC<BottomPanelProps> = ({
   
   const handleToggleCamera = () => {
     onToggleCamera();
-    toast.info(isCameraEnabled ? "Camera disabled" : "Camera enabled");
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-zinc-950/90 backdrop-blur border-t border-zinc-800 py-3 px-6 z-10">
+    <div className="fixed bottom-0 left-0 right-0 bg-zinc-950/90 backdrop-blur border-t border-zinc-800 py-2 px-4 z-10">
       <div className="container mx-auto flex items-center justify-center">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-3">
           <Toggle
             pressed={isMicEnabled}
             onClick={handleToggleMic}
