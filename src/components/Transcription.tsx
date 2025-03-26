@@ -41,9 +41,24 @@ const Transcription: React.FC<TranscriptionProps> = ({ transcripts, keywords = [
                   </span>
                   <span className="text-xs text-zinc-500">{item.timestamp}</span>
                 </div>
-                <p className="text-sm text-zinc-300 leading-relaxed">
-                  {item.text}
-                </p>
+                <div className={`
+                  relative py-2.5 px-3.5 rounded-lg
+                  ${item.speaker === 'ai' 
+                    ? 'bg-zinc-800 rounded-tl-none text-zinc-300 max-w-[90%]' 
+                    : 'bg-zinc-800/50 rounded-tr-none text-zinc-300 max-w-[90%] ml-auto'
+                  }
+                `}>
+                  <p className="text-sm leading-relaxed">
+                    {item.text}
+                  </p>
+                  <div className={`
+                    absolute top-0 
+                    ${item.speaker === 'ai' 
+                      ? '-left-2 border-t-8 border-r-8 border-zinc-800 border-t-transparent border-l-transparent' 
+                      : '-right-2 border-t-8 border-l-8 border-zinc-800/50 border-t-transparent border-r-transparent'
+                    }
+                  `}></div>
+                </div>
               </div>
             ))}
           </div>
