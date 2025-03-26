@@ -6,6 +6,7 @@ import PermissionRequest from './video/PermissionRequest';
 import VideoControls from './video/VideoControls';
 import ProgressBar from './video/ProgressBar';
 import { useMediaHandler } from '@/hooks/useMediaHandler';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface VideoPanelsProps {
   isRunning: boolean;
@@ -38,8 +39,15 @@ const VideoPanels: React.FC<VideoPanelsProps> = ({
     toggleCamera
   } = useMediaHandler(onAudioLevelChange);
 
+  const isMobile = useIsMobile();
+
   // Check if we need to show the initial permission request
   const needsInitialPermissions = hasVideoPermission === null || hasMicPermission === null;
+
+  // Mobile layout is handled in MobileLayout.tsx
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col h-full space-y-3">

@@ -1,6 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { Transcript } from '@/types/interview';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface TranscriptionProps {
   transcripts: Transcript[];
@@ -9,6 +10,7 @@ interface TranscriptionProps {
 
 const Transcription: React.FC<TranscriptionProps> = ({ transcripts, keywords = [] }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     if (scrollRef.current) {
@@ -23,7 +25,9 @@ const Transcription: React.FC<TranscriptionProps> = ({ transcripts, keywords = [
       </h3>
       <div 
         ref={scrollRef}
-        className="h-[220px] overflow-y-auto custom-scrollbar bg-zinc-950 rounded-lg p-3"
+        className={`overflow-y-auto custom-scrollbar bg-zinc-950 rounded-lg p-3 ${
+          isMobile ? 'h-[calc(100vh-22rem)]' : 'h-[220px]'
+        }`}
       >
         {transcripts.length === 0 ? (
           <div className="flex h-full items-center justify-center text-zinc-500 text-sm">
@@ -44,8 +48,8 @@ const Transcription: React.FC<TranscriptionProps> = ({ transcripts, keywords = [
                 <div className={`
                   relative py-2.5 px-3.5 rounded-lg
                   ${item.speaker === 'ai' 
-                    ? 'bg-zinc-800 rounded-tl-none text-zinc-300 max-w-[90%]' 
-                    : 'bg-zinc-800/50 rounded-tr-none text-zinc-300 max-w-[90%] ml-auto'
+                    ? 'bg-zinc-800/80 backdrop-blur-sm rounded-tl-none text-zinc-300 max-w-[90%]' 
+                    : 'bg-zinc-800/50 backdrop-blur-sm rounded-tr-none text-zinc-300 max-w-[90%] ml-auto'
                   }
                 `}>
                   <p className="text-sm leading-relaxed">
@@ -54,7 +58,7 @@ const Transcription: React.FC<TranscriptionProps> = ({ transcripts, keywords = [
                   <div className={`
                     absolute top-0 
                     ${item.speaker === 'ai' 
-                      ? '-left-2 border-t-8 border-r-8 border-zinc-800 border-t-transparent border-l-transparent' 
+                      ? '-left-2 border-t-8 border-r-8 border-zinc-800/80 border-t-transparent border-l-transparent' 
                       : '-right-2 border-t-8 border-l-8 border-zinc-800/50 border-t-transparent border-r-transparent'
                     }
                   `}></div>

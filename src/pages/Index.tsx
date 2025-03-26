@@ -7,10 +7,13 @@ import InsightsPanel from '@/components/InsightsPanel';
 import BottomPanel from '@/components/BottomPanel';
 import { useInterviewState } from '@/hooks/useInterviewState';
 import { useMediaHandler } from '@/hooks/useMediaHandler';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
+import MobileLayout from '@/components/MobileLayout';
 
 const Index = () => {
   const [interviewName] = useState("MBA Mock Interview L2");
+  const isMobile = useIsMobile();
 
   const {
     isRunning,
@@ -47,6 +50,30 @@ const Index = () => {
     // For now, we'll just show a toast notification
   };
   
+  // Render different layouts based on device
+  if (isMobile) {
+    return (
+      <MobileLayout
+        timer={timer}
+        progress={progress}
+        interviewName={interviewName}
+        isRunning={isRunning}
+        audioLevel={audioLevel}
+        transcripts={transcripts}
+        keywords={keywords}
+        onAudioLevelChange={handleAudioLevelChange}
+        isCameraEnabled={isCameraActive}
+        isMicEnabled={isMicEnabled}
+        onToggleMic={toggleMicrophone}
+        onToggleCamera={toggleCamera}
+        onEnd={handleEnd}
+        onNext={handleNext}
+        flags={flags}
+      />
+    );
+  }
+  
+  // Desktop layout
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 text-white pb-16">
       <TopBar timer={timer} progress={progress} interviewName={interviewName} />
