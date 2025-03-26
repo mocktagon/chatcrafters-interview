@@ -3,7 +3,6 @@ import React from 'react';
 import { StopCircle, Mic, MicOff, Camera, CameraOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
-import AudioVisualizer from './video/AudioVisualizer';
 import { toast } from 'sonner';
 
 interface BottomPanelProps {
@@ -37,11 +36,6 @@ const BottomPanel: React.FC<BottomPanelProps> = ({
     <div className="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur border-t border-zinc-800 py-3 px-6 z-10">
       <div className="container mx-auto flex items-center justify-center">
         <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2 mr-4">
-            <div className="text-xs text-zinc-400">Audio</div>
-            <AudioVisualizer audioLevel={audioLevel} enabled={isMicEnabled} />
-          </div>
-          
           <Toggle
             pressed={isMicEnabled}
             onClick={onToggleMic}
