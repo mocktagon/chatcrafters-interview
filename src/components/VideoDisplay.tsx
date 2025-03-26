@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useEffect } from 'react';
 import AvatarDisplay from './video/AvatarDisplay';
 
 interface VideoDisplayProps {
@@ -13,11 +14,21 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
   videoRef,
   hasVideoPermission 
 }) => {
+  // This effect ensures the video plays once the videoRef is populated
+  useEffect(() => {
+    if (videoRef?.current && videoRef.current.srcObject) {
+      videoRef.current.play().catch(err => {
+        console.error("Error playing video:", err);
+      });
+    }
+  }, [videoRef, hasVideoPermission]);
+
   const renderContent = () => {
     if (useAiAvatar) {
       return <AvatarDisplay type="ai" />;
     }
 
+    // Show the video when we explicitly have permission
     if (hasVideoPermission === true) {
       return (
         <video 

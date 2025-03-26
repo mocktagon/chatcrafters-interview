@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { toast } from "sonner";
 
@@ -15,11 +14,26 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
   const animationFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
+    const checkPermissions = async () => {
+      try {
+        const permissions = await navigator.permissions.query({ name: 'camera' as PermissionName });
+        if (permissions.state === 'denied') {
+          setHasVideoPermission(false);
+          toast.error("Camera access is blocked. Please update your browser settings to allow camera access.");
+        }
+      } catch (error) {
+        console.log("Permissions API not fully supported");
+      }
+    };
+    
+    checkPermissions();
+  }, []);
+
+  useEffect(() => {
     // Automatically request permissions when component mounts
     requestMediaPermissions();
   }, []);
 
-  // Request both camera and mic permissions together
   const requestMediaPermissions = async () => {
     setIsRequestingPermission(true);
     try {
@@ -54,7 +68,6 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
     }
   };
 
-  // Fallback to request just video permission
   const tryRequestVideoOnly = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -76,15 +89,26 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
     }
   };
 
-  // Request camera permission only
   const requestVideoPermission = async () => {
     setIsRequestingPermission(true);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      mediaStreamRef.current = stream;
       
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
+      // If we already have a stream with audio, keep those tracks
+      if (mediaStreamRef.current) {
+        const audioTracks = mediaStreamRef.current.getAudioTracks();
+        const newStream = new MediaStream([...stream.getVideoTracks(), ...audioTracks]);
+        mediaStreamRef.current = newStream;
+        
+        if (videoRef.current) {
+          videoRef.current.srcObject = newStream;
+        }
+      } else {
+        mediaStreamRef.current = stream;
+        
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
       }
       
       setHasVideoPermission(true);
@@ -98,7 +122,6 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
     }
   };
 
-  // Request microphone permission only
   const requestMicPermission = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -129,7 +152,6 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
     }
   };
 
-  // Setup audio analyzer for real audio level monitoring
   const setupAudioAnalyzer = (stream: MediaStream) => {
     if (!audioContextRef.current) {
       audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -146,7 +168,6 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
     monitorAudioLevel();
   };
 
-  // Monitor audio levels and update the audioLevel state
   const monitorAudioLevel = () => {
     if (!analyserRef.current) return;
     
@@ -173,7 +194,6 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
     updateLevel();
   };
 
-  // Toggle microphone on/off
   const toggleMicrophone = () => {
     if (!mediaStreamRef.current) return;
     
@@ -192,7 +212,6 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
     toast.success(newState ? "Microphone enabled" : "Microphone muted");
   };
 
-  // Clean up resources when component unmounts
   useEffect(() => {
     return () => {
       if (mediaStreamRef.current) {

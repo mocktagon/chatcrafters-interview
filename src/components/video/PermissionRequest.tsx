@@ -18,6 +18,15 @@ const PermissionRequest: React.FC<PermissionRequestProps> = ({
   const isCameraRequest = type === 'camera';
   const isMediaRequest = type === 'media';
   
+  const handlePermissionRequest = async () => {
+    try {
+      await onRequestPermission();
+    } catch (error) {
+      console.error("Permission request failed:", error);
+      toast.error("Could not access your device");
+    }
+  };
+  
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90 z-10">
       <div className="flex items-center justify-center space-x-2">
@@ -41,7 +50,7 @@ const PermissionRequest: React.FC<PermissionRequestProps> = ({
           : `This interview simulator needs access to your ${isCameraRequest ? 'camera' : 'microphone'} to provide the full experience.`}
       </p>
       <Button 
-        onClick={onRequestPermission} 
+        onClick={handlePermissionRequest} 
         disabled={isRequesting}
         className={isMediaRequest
           ? "bg-gradient-to-r from-amber-500 via-orange-500 to-purple-500 hover:from-amber-600 hover:via-orange-600 hover:to-purple-600 transition-all duration-300"
