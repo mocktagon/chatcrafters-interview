@@ -9,12 +9,24 @@ export function useMediaStream() {
   const getMediaStream = async (constraints: MediaStreamConstraints): Promise<MediaStream | null> => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      mediaStreamRef.current = stream;
+      
+      if (constraints.video && stream.getVideoTracks().length > 0) {
+        updateVideoStream(stream);
+      }
+      
       return stream;
     } catch (error: any) {
       console.error("Error accessing media devices:", error);
       
       if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
-        toast.error("Media permissions denied");
+        if (constraints.video && constraints.audio) {
+          toast.error("Camera and microphone access denied");
+        } else if (constraints.video) {
+          toast.error("Camera access denied");
+        } else if (constraints.audio) {
+          toast.error("Microphone access denied");
+        }
       } else {
         toast.error(`Error: ${error.message}`);
       }
