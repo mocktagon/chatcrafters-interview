@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AvatarDisplay from './video/AvatarDisplay';
 
 interface VideoDisplayProps {
@@ -16,15 +16,22 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
   hasVideoPermission,
   isCameraEnabled = true
 }) => {
+  const [videoError, setVideoError] = useState<boolean>(false);
+
   // This effect ensures the video plays once the videoRef is populated
   useEffect(() => {
     if (videoRef?.current && videoRef.current.srcObject) {
       console.log("Video element present with srcObject, attempting to play");
       videoRef.current.play().catch(err => {
         console.error("Error playing video:", err);
+        setVideoError(true);
       });
     }
-  }, [videoRef]);
+
+    return () => {
+      setVideoError(false);
+    };
+  }, [videoRef, videoRef?.current?.srcObject]);
 
   // If it's an AI avatar, just render that
   if (useAiAvatar) {
@@ -36,7 +43,11 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
   }
 
   // Determine if we should show the user avatar or video
-  const showAvatar = !isCameraEnabled || hasVideoPermission === false || hasVideoPermission === null;
+  const showAvatar = !isCameraEnabled || 
+                     hasVideoPermission === false || 
+                     hasVideoPermission === null ||
+                     videoError ||
+                     !videoRef?.current?.srcObject;
 
   return (
     <div className="h-full w-full flex items-center justify-center bg-black/50 rounded-lg">

@@ -123,9 +123,24 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
   // Automatically request permissions when component mounts
   useEffect(() => {
     console.log("useMediaHandler mounted, requesting permissions");
+    let isMounted = true;
+    
     const initializeMedia = async () => {
       try {
-        await requestMediaPermissions();
+        if (isMounted) {
+          await requestMediaPermissions();
+          
+          // For Safari and iOS compatibility, try to request permissions again if denied
+          if (hasVideoPermission === false && isMounted) {
+            // Small delay to avoid rapid permission requests
+            setTimeout(() => {
+              if (isMounted) {
+                console.log("Retrying permission request for Safari compatibility");
+                requestVideoPermission();
+              }
+            }, 1000);
+          }
+        }
       } catch (error) {
         console.error("Failed to initialize media:", error);
       }
@@ -134,6 +149,7 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
     initializeMedia();
     
     return () => {
+      isMounted = false;
       console.log("useMediaHandler unmounted, stopping media stream");
       stopMediaStream();
     };

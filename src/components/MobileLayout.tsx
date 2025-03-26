@@ -11,6 +11,7 @@ import Transcription from './Transcription';
 import InsightsPanel from './InsightsPanel';
 import { Transcript } from '@/types/interview';
 import { useMediaHandler } from '@/hooks/useMediaHandler';
+import PermissionRequest from './video/PermissionRequest';
 
 interface MobileLayoutProps {
   timer: string;
@@ -53,8 +54,15 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 }) => {
   const {
     videoRef,
-    hasVideoPermission
+    hasVideoPermission,
+    hasMicPermission,
+    isRequestingPermission,
+    requestMediaPermissions,
+    requestVideoPermission
   } = useMediaHandler(onAudioLevelChange);
+  
+  // Check if we need to show permission request
+  const needsInitialPermissions = hasVideoPermission === null || hasMicPermission === null;
   
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 text-white relative">
@@ -73,6 +81,22 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
           
           {/* User video PIP - smaller square */}
           <div className="absolute top-3 right-3 w-24 h-24 overflow-hidden rounded-lg border border-zinc-700 shadow-lg">
+            {needsInitialPermissions ? (
+              <PermissionRequest 
+                type="media"
+                onRequestPermission={requestMediaPermissions}
+                isRequesting={isRequestingPermission}
+              />
+            ) : (
+              hasVideoPermission === false && (
+                <PermissionRequest 
+                  type="camera"
+                  onRequestPermission={requestVideoPermission}
+                  isRequesting={isRequestingPermission}
+                />
+              )
+            )}
+            
             <VideoDisplay 
               useAiAvatar={false} 
               progress={0} 
