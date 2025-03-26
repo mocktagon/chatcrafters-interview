@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import TopBar from '@/components/TopBar';
 import BottomBar from '@/components/BottomBar';
@@ -7,6 +6,7 @@ import VideoDisplay from '@/components/VideoDisplay';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent } from '@/components/ui/card';
+import { Activity, Brain, Sigma, Sparkles } from 'lucide-react';
 
 const Index = () => {
   const [isRunning, setIsRunning] = useState(false);
@@ -32,6 +32,11 @@ const Index = () => {
     text: string;
     severity: 'low' | 'medium' | 'high';
   }>>([]);
+  
+  // Add sentiment analysis state
+  const [sentiment, setSentiment] = useState<'positive' | 'neutral' | 'negative'>('neutral');
+  const [keywords, setKeywords] = useState<string[]>([]);
+  const [insightScore, setInsightScore] = useState(0);
   
   // Timer effect
   useEffect(() => {
@@ -136,12 +141,21 @@ const Index = () => {
       ]);
     }, 20000);
     
+    // Demo: Add sentiment analysis after 10 seconds
+    const sentimentTimeout = setTimeout(() => {
+      if (!isRunning) return;
+      setSentiment('positive');
+      setKeywords(['leadership', 'collaboration', 'problem-solving']);
+      setInsightScore(78);
+    }, 10000);
+    
     return () => {
       clearTimeout(aiMessageTimeout);
       clearTimeout(userResponseTimeout);
       clearTimeout(redFlagTimeout);
       clearTimeout(followupTimeout);
       clearTimeout(highFlagTimeout);
+      clearTimeout(sentimentTimeout);
     };
   }, [isRunning, timer]);
   
@@ -179,74 +193,79 @@ const Index = () => {
   };
   
   return (
-    <div className="min-h-screen flex flex-col bg-interview-lightBg">
+    <div className="min-h-screen flex flex-col bg-slate-900 text-slate-300">
       <TopBar timer={timer} />
       
       <div className="flex-grow p-4">
         <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-8rem)]">
-          {/* Left panel - Candidate Video */}
+          {/* First column: Video displays stacked vertically */}
           <ResizablePanel defaultSize={25} minSize={20}>
-            <Card className="h-full glass-panel overflow-hidden">
-              <CardContent className="p-2 h-full">
-                <div className="rounded-lg overflow-hidden border border-interview-border bg-gray-50 h-full relative">
-                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100">
-                    <div className="text-center">
-                      <div className="w-24 h-24 rounded-full bg-interview-blue/10 flex items-center justify-center mx-auto">
-                        <VideoDisplay useAiAvatar={false} progress={0} />
+            <ResizablePanelGroup direction="vertical">
+              {/* Top panel - Candidate Video */}
+              <ResizablePanel defaultSize={50}>
+                <Card className="h-full glass-panel dark">
+                  <CardContent className="p-2 h-full">
+                    <div className="rounded-lg overflow-hidden border border-slate-700 bg-slate-800 h-full relative">
+                      <VideoDisplay useAiAvatar={false} progress={0} />
+                      
+                      {/* Audio visualizer */}
+                      <div className="absolute bottom-4 left-0 right-0 flex justify-center">
+                        <div className="audio-visualizer flex space-x-1">
+                          {[...Array(8)].map((_, i) => (
+                            <div 
+                              key={i} 
+                              className="h-6 w-1 bg-slate-600 rounded-full"
+                              style={{ 
+                                height: `${Math.random() * 16 + 4}px`,
+                                opacity: isRunning ? 1 : 0.4,
+                                transition: 'height 0.2s ease-in-out'
+                              }}
+                            />
+                          ))}
+                        </div>
                       </div>
-                      <p className="text-interview-darkText text-sm font-medium mt-4">You</p>
-                      <p className="text-interview-lightText text-xs">Camera preview</p>
                     </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                  </CardContent>
+                </Card>
+              </ResizablePanel>
+              
+              <ResizableHandle withHandle />
+              
+              {/* Bottom panel - AI Avatar */}
+              <ResizablePanel defaultSize={50}>
+                <Card className="h-full glass-panel dark">
+                  <CardContent className="p-2 h-full">
+                    <div className="rounded-lg overflow-hidden border border-slate-700 bg-slate-800 h-full relative">
+                      <VideoDisplay useAiAvatar={true} progress={progress} />
+                      
+                      {/* Progress bar */}
+                      <div className="absolute bottom-0 left-0 right-0 progress-bar bg-slate-700">
+                        <div 
+                          className="progress-bar-inner bg-interview-blue" 
+                          style={{ width: `${progress}%` }}
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </ResizablePanel>
+            </ResizablePanelGroup>
           </ResizablePanel>
           
           <ResizableHandle withHandle />
           
-          {/* Second panel - AI Avatar */}
-          <ResizablePanel defaultSize={25} minSize={20}>
-            <Card className="h-full glass-panel overflow-hidden">
-              <CardContent className="p-2 h-full">
-                <div className="rounded-lg overflow-hidden border border-interview-border bg-gray-50 h-full relative">
-                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100">
-                    <div className="text-center">
-                      <div className="w-24 h-24 rounded-full bg-interview-blue/10 flex items-center justify-center mx-auto animate-pulse-subtle">
-                        <VideoDisplay useAiAvatar={true} progress={progress} />
-                      </div>
-                      <p className="text-interview-darkText text-sm font-medium mt-4">AI Interviewer</p>
-                      <p className="text-interview-lightText text-xs">
-                        {isRunning ? "Speaking..." : "Waiting to start"}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  {/* Progress bar */}
-                  <div className="absolute bottom-0 left-0 right-0 progress-bar">
-                    <div 
-                      className="progress-bar-inner" 
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </ResizablePanel>
-          
-          <ResizableHandle withHandle />
-          
-          {/* Third panel - Transcriptions (Enlarged) */}
-          <ResizablePanel defaultSize={30} minSize={25}>
-            <Card className="h-full glass-panel overflow-hidden">
+          {/* Second column - Transcriptions (Enlarged) */}
+          <ResizablePanel defaultSize={45} minSize={30}>
+            <Card className="h-full glass-panel dark">
               <CardContent className="p-4 h-full">
-                <h3 className="text-md font-semibold text-interview-darkText mb-3">
-                  Transcription
+                <h3 className="text-md font-semibold text-slate-200 mb-3 flex items-center">
+                  <Activity className="w-4 h-4 mr-2 text-interview-blue" />
+                  Conversation
                 </h3>
                 <ScrollArea className="h-[calc(100%-2rem)]">
-                  <div className="bg-white/60 rounded-lg p-4 border border-interview-border min-h-[90%]">
+                  <div className="bg-slate-800/60 rounded-lg p-4 border border-slate-700 min-h-[90%]">
                     {transcripts.length === 0 ? (
-                      <div className="flex h-full items-center justify-center text-interview-lightText text-sm">
+                      <div className="flex h-full items-center justify-center text-slate-500 text-sm">
                         Interview transcription will appear here...
                       </div>
                     ) : (
@@ -259,11 +278,20 @@ const Index = () => {
                               }`}>
                                 {item.speaker === 'ai' ? 'AI Interviewer' : 'You'}
                               </span>
-                              <span className="text-xs text-interview-lightText">{item.timestamp}</span>
+                              <span className="text-xs text-slate-500">{item.timestamp}</span>
                             </div>
-                            <p className="text-base text-interview-darkText leading-relaxed">
+                            <p className="text-base text-slate-300 leading-relaxed">
                               {item.text}
                             </p>
+                            {keywords.length > 0 && item.speaker === 'user' && (
+                              <div className="mt-2 flex flex-wrap gap-1">
+                                {keywords.map((keyword, idx) => (
+                                  <span key={idx} className="text-xs px-2 py-1 rounded-full bg-blue-600/20 text-blue-400">
+                                    #{keyword}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -276,53 +304,113 @@ const Index = () => {
           
           <ResizableHandle withHandle />
           
-          {/* Fourth panel - Red Flags and Insights */}
-          <ResizablePanel defaultSize={20} minSize={15}>
-            <Card className="h-full glass-panel overflow-hidden">
-              <CardContent className="p-4 h-full">
-                <h3 className="text-md font-semibold flex items-center text-interview-darkText mb-3">
-                  <span className="h-3.5 w-3.5 mr-1.5 text-interview-red">🚩</span>
-                  Insights
-                </h3>
-                <ScrollArea className="h-[calc(100%-2rem)]">
-                  <div className="bg-white/60 rounded-lg p-4 border border-interview-border min-h-[90%]">
-                    {flags.length === 0 ? (
-                      <div className="flex h-full items-center justify-center text-interview-lightText text-sm">
-                        Interview insights will appear here...
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {flags.map((flag) => (
-                          <div 
-                            key={flag.id} 
-                            className="p-3 rounded-md animate-scale-in"
-                            style={{
-                              backgroundColor: 
-                                flag.severity === 'high' ? 'rgba(255, 59, 48, 0.1)' :
-                                flag.severity === 'medium' ? 'rgba(255, 149, 0, 0.1)' :
-                                'rgba(255, 204, 0, 0.1)'
-                            }}
-                          >
-                            <div className="flex items-start">
-                              <div
-                                className="w-2 h-2 mt-1.5 rounded-full mr-2 flex-shrink-0"
-                                style={{
-                                  backgroundColor:
-                                    flag.severity === 'high' ? '#FF3B30' :
-                                    flag.severity === 'medium' ? '#FF9500' :
-                                    '#FFCC00'
-                                }}
-                              />
-                              <p className="text-sm text-interview-darkText">{flag.text}</p>
-                            </div>
+          {/* Third column - Insights Dashboard */}
+          <ResizablePanel defaultSize={30} minSize={25}>
+            <ResizablePanelGroup direction="vertical">
+              {/* Top panel - Red Flags */}
+              <ResizablePanel defaultSize={60}>
+                <Card className="h-full glass-panel dark">
+                  <CardContent className="p-4 h-full">
+                    <h3 className="text-md font-semibold flex items-center text-slate-200 mb-3">
+                      <span className="h-3.5 w-3.5 mr-1.5 text-interview-red">🚩</span>
+                      Insights
+                    </h3>
+                    <ScrollArea className="h-[calc(100%-2rem)]">
+                      <div className="bg-slate-800/60 rounded-lg p-4 border border-slate-700 min-h-[90%]">
+                        {flags.length === 0 ? (
+                          <div className="flex h-full items-center justify-center text-slate-500 text-sm">
+                            Interview insights will appear here...
                           </div>
-                        ))}
+                        ) : (
+                          <div className="space-y-4">
+                            {flags.map((flag) => (
+                              <div 
+                                key={flag.id} 
+                                className="p-3 rounded-md animate-scale-in"
+                                style={{
+                                  backgroundColor: 
+                                    flag.severity === 'high' ? 'rgba(239, 68, 68, 0.15)' :
+                                    flag.severity === 'medium' ? 'rgba(245, 158, 11, 0.15)' :
+                                    'rgba(234, 179, 8, 0.15)'
+                                }}
+                              >
+                                <div className="flex items-start">
+                                  <div
+                                    className="w-2 h-2 mt-1.5 rounded-full mr-2 flex-shrink-0"
+                                    style={{
+                                      backgroundColor:
+                                        flag.severity === 'high' ? '#ef4444' :
+                                        flag.severity === 'medium' ? '#f59e0b' :
+                                        '#eab308'
+                                    }}
+                                  />
+                                  <p className="text-sm text-slate-300">{flag.text}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </ScrollArea>
-              </CardContent>
-            </Card>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </ResizablePanel>
+              
+              <ResizableHandle withHandle />
+              
+              {/* Bottom panel - Analytics Dashboard (Surprise feature) */}
+              <ResizablePanel defaultSize={40}>
+                <Card className="h-full glass-panel dark">
+                  <CardContent className="p-4 h-full">
+                    <h3 className="text-md font-semibold flex items-center text-slate-200 mb-3">
+                      <Brain className="w-4 h-4 mr-2 text-purple-400" />
+                      AI Analysis
+                    </h3>
+                    <div className="grid grid-cols-2 gap-3 mb-3">
+                      <div className="p-3 rounded-lg bg-slate-800/80 border border-slate-700">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs text-slate-400">Sentiment</span>
+                          <div className={`h-2 w-2 rounded-full ${
+                            sentiment === 'positive' ? 'bg-green-400' : 
+                            sentiment === 'negative' ? 'bg-red-400' : 'bg-yellow-400'
+                          }`}></div>
+                        </div>
+                        <p className="text-lg font-medium text-slate-200 capitalize mt-1">{sentiment}</p>
+                      </div>
+
+                      <div className="p-3 rounded-lg bg-slate-800/80 border border-slate-700">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs text-slate-400">Insight Score</span>
+                          <Sigma className="h-3 w-3 text-blue-400" />
+                        </div>
+                        <p className="text-lg font-medium text-slate-200 mt-1">{insightScore}/100</p>
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-lg bg-slate-800/80 border border-slate-700 h-[calc(100%-7rem)]">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs text-slate-400">AI Summary</span>
+                        <Sparkles className="h-3 w-3 text-amber-400" />
+                      </div>
+                      {isRunning ? (
+                        <div className="animate-pulse space-y-2 mt-2">
+                          <div className="h-2 bg-slate-700 rounded w-3/4"></div>
+                          <div className="h-2 bg-slate-700 rounded w-1/2"></div>
+                          <div className="h-2 bg-slate-700 rounded w-5/6"></div>
+                          <div className="h-2 bg-slate-700 rounded w-1/3"></div>
+                        </div>
+                      ) : (
+                        <p className="text-sm text-slate-300 mt-1">
+                          {transcripts.length > 1 ? 
+                          "The candidate demonstrates some experience with project management and teamwork, but could provide more specific metrics and concrete examples." : 
+                          "Start the interview to generate an AI summary."}
+                        </p>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </ResizablePanel>
+            </ResizablePanelGroup>
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
