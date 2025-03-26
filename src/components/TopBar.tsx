@@ -1,12 +1,14 @@
 
 import React from 'react';
-import { Clock, Download, BarChart, Settings } from 'lucide-react';
+import { Clock, Settings } from 'lucide-react';
+import { Progress } from "@/components/ui/progress";
 
 interface TopBarProps {
   timer: string;
+  progress?: number;
 }
 
-const TopBar: React.FC<TopBarProps> = ({ timer }) => {
+const TopBar: React.FC<TopBarProps> = ({ timer, progress = 0 }) => {
   return (
     <div className="h-16 px-6 flex items-center justify-between animate-fade-in bg-black/70 backdrop-blur-sm border-b border-zinc-800/50">
       <div className="flex items-center">
@@ -16,12 +18,10 @@ const TopBar: React.FC<TopBarProps> = ({ timer }) => {
       </div>
       
       <div className="flex items-center space-x-4">
-        <button className="p-2 rounded-full hover:bg-zinc-800 transition-colors">
-          <BarChart className="h-5 w-5 text-white" />
-        </button>
-        <button className="p-2 rounded-full hover:bg-zinc-800 transition-colors">
-          <Download className="h-5 w-5 text-white" />
-        </button>
+        <div className="flex items-center space-x-3 w-64">
+          <Progress value={progress} className="h-2 bg-zinc-800" />
+          <span className="text-xs text-zinc-400 min-w-[40px] text-right">{Math.round(progress)}%</span>
+        </div>
         <button className="p-2 rounded-full hover:bg-zinc-800 transition-colors">
           <Settings className="h-5 w-5 text-white" />
         </button>
