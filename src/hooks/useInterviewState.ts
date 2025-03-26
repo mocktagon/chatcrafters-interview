@@ -42,9 +42,6 @@ export function useInterviewState() {
           // Update progress
           setProgress(Math.min(newSeconds / 180 * 100, 100));
           
-          // Random audio level
-          setAudioLevel(Math.floor(Math.random() * 5) + 1);
-          
           return newSeconds;
         });
       }, 1000);
@@ -181,6 +178,10 @@ export function useInterviewState() {
     setFlags([]);
   };
 
+  const handleAudioLevelChange = (level: number) => {
+    setAudioLevel(level);
+  };
+
   return {
     isRunning,
     timer,
@@ -195,6 +196,7 @@ export function useInterviewState() {
     handleStart,
     handlePause,
     handleEnd,
-    resetInterview
+    resetInterview,
+    handleAudioLevelChange
   };
 }

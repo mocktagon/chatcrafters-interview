@@ -19,7 +19,8 @@ const Index = () => {
     insightScore,
     handleStart,
     handlePause,
-    handleEnd
+    handleEnd,
+    handleAudioLevelChange
   } = useInterviewState();
   
   return (
@@ -29,7 +30,12 @@ const Index = () => {
       <div className="flex-grow p-4 grid grid-cols-12 gap-4">
         {/* First column: Video displays stacked vertically (3 cols) */}
         <div className="col-span-3">
-          <VideoPanels isRunning={isRunning} progress={progress} />
+          <VideoPanels 
+            isRunning={isRunning} 
+            progress={progress} 
+            audioLevel={audioLevel}
+            onAudioLevelChange={handleAudioLevelChange}
+          />
         </div>
         
         {/* Second column: Transcriptions (Enlarged) (6 cols) */}
