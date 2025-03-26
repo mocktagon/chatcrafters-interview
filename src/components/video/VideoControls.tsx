@@ -1,57 +1,69 @@
 
 import React from 'react';
-import { Camera, Mic, MicOff } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Camera, Mic, MicOff, CameraOff } from 'lucide-react';
+import { Toggle } from '@/components/ui/toggle';
 import AudioVisualizer from './AudioVisualizer';
 
 interface VideoControlsProps {
   hasMicPermission: boolean | null;
   isMicEnabled: boolean;
+  isCameraEnabled: boolean;
   audioLevel: number;
   onToggleMicrophone: () => void;
+  onToggleCamera: () => void;
   onRequestMicPermission: () => Promise<void>;
 }
 
 const VideoControls: React.FC<VideoControlsProps> = ({
   hasMicPermission,
   isMicEnabled,
+  isCameraEnabled,
   audioLevel,
   onToggleMicrophone,
+  onToggleCamera,
   onRequestMicPermission
 }) => {
   return (
     <>
       {/* Camera controls overlay */}
       <div className="absolute bottom-4 left-4 flex items-center space-x-3">
-        <Button 
+        <Toggle 
           variant="outline" 
-          size="icon" 
-          className="bg-black/30 border-white/10 hover:bg-black/40 text-white w-9 h-9 rounded-full"
-          title="Camera"
+          className={`bg-black/30 border-white/10 hover:bg-black/40 text-white w-10 h-10 rounded-full ${!isCameraEnabled ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30 border-red-500/50' : ''}`}
+          pressed={isCameraEnabled}
+          onClick={onToggleCamera}
+          title={isCameraEnabled ? "Turn off camera" : "Turn on camera"}
         >
-          <Camera className="w-4 h-4" />
-        </Button>
+          {isCameraEnabled ? (
+            <Camera className="w-4 h-4" />
+          ) : (
+            <CameraOff className="w-4 h-4" />
+          )}
+        </Toggle>
         
         {hasMicPermission === null ? (
-          <Button 
+          <Toggle 
             variant="outline" 
-            size="icon" 
-            className="bg-black/30 border-white/10 hover:bg-black/40 text-white w-9 h-9 rounded-full"
-            title="Enable Microphone"
+            className="bg-black/30 border-white/10 hover:bg-black/40 text-white w-10 h-10 rounded-full"
             onClick={onRequestMicPermission}
+            title="Enable Microphone"
           >
             <Mic className="w-4 h-4" />
-          </Button>
+          </Toggle>
         ) : (
-          <Button 
+          <Toggle 
             variant="outline" 
-            size="icon" 
-            className="bg-black/30 border-white/10 hover:bg-black/40 text-white w-9 h-9 rounded-full"
-            title={isMicEnabled ? "Mute Microphone" : "Unmute Microphone"}
+            className={`bg-black/30 border-white/10 hover:bg-black/40 text-white w-10 h-10 rounded-full ${!isMicEnabled ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30 border-red-500/50' : ''}`}
+            pressed={isMicEnabled}
             onClick={onToggleMicrophone}
+            title={isMicEnabled ? "Mute Microphone" : "Unmute Microphone"}
           >
-            {isMicEnabled ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
-          </Button>
+            {isMicEnabled ? (
+              <Mic className="w-4 h-4" />
+            ) : (
+              <MicOff className="w-4 h-4" />
+            )}
+          </Toggle>
         )}
       </div>
       

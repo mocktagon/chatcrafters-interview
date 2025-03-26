@@ -7,6 +7,7 @@ import InsightsPanel from '@/components/InsightsPanel';
 import BottomPanel from '@/components/BottomPanel';
 import { useInterviewState } from '@/hooks/useInterviewState';
 import { useMediaHandler } from '@/hooks/useMediaHandler';
+import { toast } from 'sonner';
 
 const Index = () => {
   const [isCameraEnabled, setIsCameraEnabled] = useState(true);
@@ -41,6 +42,16 @@ const Index = () => {
     setIsCameraEnabled(!isCameraEnabled);
   };
   
+  const handleNext = () => {
+    toast.info("Moving to next question", {
+      description: "AI will provide the next question in the interview sequence.",
+      position: "bottom-right"
+    });
+    
+    // This would typically trigger the next AI question
+    // For now, we'll just show a toast notification
+  };
+  
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-black via-black to-zinc-900 text-white pb-16">
       <TopBar timer={timer} />
@@ -54,12 +65,17 @@ const Index = () => {
             audioLevel={audioLevel}
             onAudioLevelChange={handleAudioLevelChange}
             isCameraEnabled={isCameraEnabled}
+            onToggleCamera={handleToggleCamera}
           />
         </div>
         
         {/* Second column: Transcriptions (Enlarged) (8 cols) */}
         <div className="col-span-8">
-          <TranscriptionPanel transcripts={transcripts} keywords={keywords} />
+          <TranscriptionPanel 
+            transcripts={transcripts} 
+            keywords={keywords}
+            onNext={handleNext} 
+          />
         </div>
       </div>
       

@@ -2,6 +2,7 @@
 import React from 'react';
 import { StopCircle, Mic, MicOff, Camera, CameraOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Toggle } from '@/components/ui/toggle';
 import AudioVisualizer from './video/AudioVisualizer';
 import { toast } from 'sonner';
 
@@ -36,31 +37,29 @@ const BottomPanel: React.FC<BottomPanelProps> = ({
     <div className="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur border-t border-zinc-800 py-3 px-6 z-10">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <Button
-            variant="outline"
-            size="icon"
+          <Toggle
+            pressed={isMicEnabled}
             onClick={onToggleMic}
-            className={`rounded-full ${!isMicEnabled ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30 border-red-500/50' : 'bg-zinc-800 hover:bg-zinc-700 border-zinc-700'}`}
+            className={`rounded-full h-10 w-10 ${!isMicEnabled ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30 border-red-500/50' : 'bg-zinc-800 hover:bg-zinc-700 border-zinc-700'}`}
           >
             {isMicEnabled ? (
               <Mic className="h-5 w-5 stroke-[2.5px]" />
             ) : (
               <MicOff className="h-5 w-5 stroke-[2.5px]" />
             )}
-          </Button>
+          </Toggle>
           
-          <Button
-            variant="outline"
-            size="icon"
+          <Toggle
+            pressed={isCameraEnabled}
             onClick={onToggleCamera}
-            className={`rounded-full ${!isCameraEnabled ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30 border-red-500/50' : 'bg-zinc-800 hover:bg-zinc-700 border-zinc-700'}`}
+            className={`rounded-full h-10 w-10 ${!isCameraEnabled ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30 border-red-500/50' : 'bg-zinc-800 hover:bg-zinc-700 border-zinc-700'}`}
           >
             {isCameraEnabled ? (
               <Camera className="h-5 w-5 stroke-[2.5px]" />
             ) : (
               <CameraOff className="h-5 w-5 stroke-[2.5px]" />
             )}
-          </Button>
+          </Toggle>
         </div>
         
         <div className="flex items-center">
