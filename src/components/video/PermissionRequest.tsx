@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { AlertCircle, Camera, Mic } from 'lucide-react';
+import { AlertCircle, Camera, Mic, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from "sonner";
 
@@ -46,7 +46,7 @@ const PermissionRequest: React.FC<PermissionRequestProps> = ({
       </h3>
       <p className="text-slate-300 text-[10px] sm:text-xs mb-2 text-center">
         {isMediaRequest
-          ? 'Tap to allow access'
+          ? 'Tap to allow access to your devices'
           : `Tap to allow ${isCameraRequest ? 'camera' : 'microphone'} access`}
       </p>
       <Button 
@@ -69,9 +69,17 @@ const PermissionRequest: React.FC<PermissionRequestProps> = ({
         </div>
       </Button>
       
-      <p className="text-slate-400 text-[8px] sm:text-[10px] mt-2 text-center max-w-xs">
-        If you see a browser permission popup, please click "Allow" to enable your {isCameraRequest ? 'camera' : isMediaRequest ? 'devices' : 'microphone'}
-      </p>
+      <div className="mt-4 p-2 bg-slate-900/50 rounded-md max-w-[90%] text-center">
+        <div className="flex items-center justify-center mb-1">
+          <Info className="w-3 h-3 text-blue-400 mr-1" />
+          <p className="text-blue-400 text-[9px] sm:text-[11px] font-medium">Browser Permission Required</p>
+        </div>
+        <p className="text-slate-400 text-[8px] sm:text-[10px] text-center">
+          Look for a permission popup at the top of your browser.
+          <br />
+          Click "Allow" when prompted to enable your {isCameraRequest ? 'camera' : isMediaRequest ? 'devices' : 'microphone'}
+        </p>
+      </div>
     </div>
   );
 };

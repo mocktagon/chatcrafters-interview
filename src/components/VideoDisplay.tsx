@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import AvatarDisplay from './video/AvatarDisplay';
 
 interface VideoDisplayProps {
@@ -18,17 +18,22 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
 }) => {
   const [videoError, setVideoError] = useState<boolean>(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false);
+  
+  // Separate local video ref in case one isn't provided
+  const localVideoRef = useRef<HTMLVideoElement>(null);
+  const effectiveVideoRef = videoRef || localVideoRef;
 
   // This effect ensures the video plays once the videoRef is populated
   useEffect(() => {
-    if (!videoRef?.current) {
-      // No video element yet
+    const videoElement = effectiveVideoRef.current;
+    if (!videoElement) {
+      console.log("No video element available yet");
       setIsVideoPlaying(false);
       return;
     }
 
-    if (!videoRef.current.srcObject) {
-      console.log("Video element exists but no srcObject");
+    if (!videoElement.srcObject) {
+      console.log("Video element exists but no srcObject attached");
       setIsVideoPlaying(false);
       return;
     }
@@ -38,7 +43,12 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
     // Try to play the video
     const playVideo = async () => {
       try {
-        await videoRef.current!.play();
+        // For Safari and mobile browsers
+        videoElement.setAttribute('playsinline', '');
+        videoElement.setAttribute('autoplay', '');
+        videoElement.setAttribute('muted', '');
+
+        await videoElement.play();
         setIsVideoPlaying(true);
         setVideoError(false);
         console.log("Video playing successfully");
@@ -49,13 +59,32 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
       }
     };
     
+    // Play the video and set up event listeners
     playVideo();
-
+    
+    // Set up event listeners to track video playing status
+    const handlePlaying = () => {
+      console.log("Video is now playing");
+      setIsVideoPlaying(true);
+      setVideoError(false);
+    };
+    
+    const handleError = (e: Event) => {
+      console.error("Video element error:", e);
+      setVideoError(true);
+      setIsVideoPlaying(false);
+    };
+    
+    videoElement.addEventListener('playing', handlePlaying);
+    videoElement.addEventListener('error', handleError);
+    
     return () => {
+      videoElement.removeEventListener('playing', handlePlaying);
+      videoElement.removeEventListener('error', handleError);
       setVideoError(false);
       setIsVideoPlaying(false);
     };
-  }, [videoRef, videoRef?.current?.srcObject]);
+  }, [effectiveVideoRef, effectiveVideoRef.current?.srcObject]);
 
   // If it's an AI avatar, just render that
   if (useAiAvatar) {
@@ -71,21 +100,19 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                      hasVideoPermission === false || 
                      hasVideoPermission === null ||
                      videoError ||
-                     !videoRef?.current?.srcObject ||
+                     !effectiveVideoRef.current?.srcObject ||
                      !isVideoPlaying;
 
   return (
     <div className="h-full w-full flex items-center justify-center bg-black/50 rounded-lg overflow-hidden">
       <div className="w-full h-full relative">
-        {!showAvatar && (
-          <video 
-            ref={videoRef} 
-            autoPlay 
-            playsInline 
-            muted 
-            className="w-full h-full object-cover"
-          />
-        )}
+        <video 
+          ref={effectiveVideoRef} 
+          autoPlay 
+          playsInline 
+          muted 
+          className={`w-full h-full object-cover ${showAvatar ? 'invisible absolute' : 'visible'}`}
+        />
         
         {showAvatar && (
           <div className="absolute inset-0 flex items-center justify-center">

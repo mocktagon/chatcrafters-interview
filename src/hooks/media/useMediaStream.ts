@@ -20,23 +20,44 @@ export function useMediaStream() {
         throw new Error("getUserMedia is not supported in this browser");
       }
       
-      // Special handling for iOS Safari
+      // Prepare video constraints with proper fallbacks for all browsers
+      let effectiveConstraints = { ...constraints };
+      
+      // iOS Safari and other mobile browsers need specific constraints
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      if (isIOS) {
-        // iOS Safari needs special handling for video constraints
-        if (constraints.video && typeof constraints.video === 'boolean') {
-          constraints = {
-            ...constraints,
-            video: {
-              facingMode: 'user',
-              width: { ideal: 1280 },
-              height: { ideal: 720 }
-            }
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      
+      if (constraints.video) {
+        // For mobile browsers, especially iOS Safari
+        if (isIOS || isMobile) {
+          effectiveConstraints.video = {
+            facingMode: 'user',
+            width: { ideal: 640 },
+            height: { ideal: 480 }
+          };
+          console.log("Using iOS/mobile optimized video constraints");
+        } 
+        // For Safari desktop
+        else if (isSafari) {
+          effectiveConstraints.video = {
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          };
+          console.log("Using Safari desktop optimized video constraints");
+        }
+        // For other browsers that might need explicit values
+        else if (typeof constraints.video === 'boolean') {
+          effectiveConstraints.video = {
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
           };
         }
       }
       
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      console.log("Using effective constraints:", JSON.stringify(effectiveConstraints));
+      const stream = await navigator.mediaDevices.getUserMedia(effectiveConstraints);
+      
       console.log("Media stream obtained successfully with tracks:", 
                   stream.getTracks().map(t => `${t.kind} (${t.label})`));
       
@@ -79,21 +100,35 @@ export function useMediaStream() {
     if (videoRef.current) {
       console.log("Setting stream to video element");
       
-      // If there's already a stream, stop it first to avoid memory leaks
-      if (videoRef.current.srcObject instanceof MediaStream) {
-        console.log("Replacing existing stream");
+      try {
+        // If there's already a stream, stop it first to avoid memory leaks
+        if (videoRef.current.srcObject instanceof MediaStream) {
+          console.log("Replacing existing stream");
+        }
+        
+        videoRef.current.srcObject = stream;
+        
+        // Make sure autoplay works even on mobile browsers
+        videoRef.current.setAttribute('playsinline', '');
+        videoRef.current.setAttribute('autoplay', '');
+        videoRef.current.setAttribute('muted', '');
+        
+        videoRef.current.muted = true; // Important for autoplay
+        
+        // Try playing immediately
+        const playPromise = videoRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            console.error("Error playing video after setting srcObject:", err);
+            // For iOS Safari, we might need to play on user interaction
+            if (err.name === 'NotAllowedError') {
+              console.log("Autoplay prevented. Video will play on user interaction.");
+            }
+          });
+        }
+      } catch (err) {
+        console.error("Error setting video srcObject:", err);
       }
-      
-      videoRef.current.srcObject = stream;
-      
-      // Make sure autoplay works even on mobile browsers
-      videoRef.current.setAttribute('playsinline', '');
-      videoRef.current.setAttribute('autoplay', '');
-      videoRef.current.setAttribute('muted', '');
-      
-      videoRef.current.play().catch(err => {
-        console.error("Error playing video:", err);
-      });
     } else {
       console.warn("Video ref is not available");
     }
