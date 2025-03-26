@@ -4,7 +4,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import VideoDisplay from './VideoDisplay';
 import VideoControls from './video/VideoControls';
 import ProgressBar from './video/ProgressBar';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import BottomPanel from './BottomPanel';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ChevronUp } from 'lucide-react';
@@ -59,46 +58,29 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
         <div className="text-sm font-bold text-purple-300">{timer}</div>
       </div>
       
-      {/* Main video (AI) */}
-      <div className="flex-grow p-3">
-        <Card className="h-full w-full bg-zinc-950 border-zinc-800 shadow-md">
-          <CardContent className="p-2 h-full">
-            <div className="relative h-full rounded-lg overflow-hidden border border-zinc-800/50 bg-black/80">
-              <VideoDisplay useAiAvatar={true} progress={progress} />
-              <ProgressBar progress={progress} />
-              
-              {/* User video PIP */}
-              <div className="absolute top-3 right-3 w-28 h-40 md:w-32 md:h-44 overflow-hidden rounded-lg border border-zinc-700/40 shadow-lg">
-                <VideoDisplay 
-                  useAiAvatar={false} 
-                  progress={0} 
-                  hasVideoPermission={true}
-                  isCameraEnabled={isCameraEnabled}
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      {/* Top half - Square AI video with PIP */}
+      <div className="p-3">
+        <div className="aspect-square w-full relative bg-black rounded-lg border border-zinc-800 overflow-hidden">
+          {/* Main AI Video */}
+          <VideoDisplay useAiAvatar={true} progress={progress} />
+          <ProgressBar progress={progress} />
+          
+          {/* User video PIP - smaller square */}
+          <div className="absolute top-3 right-3 w-24 h-24 overflow-hidden rounded-lg border border-zinc-700 shadow-lg">
+            <VideoDisplay 
+              useAiAvatar={false} 
+              progress={0} 
+              hasVideoPermission={true}
+              isCameraEnabled={isCameraEnabled}
+            />
+          </div>
+        </div>
       </div>
       
-      {/* Bottom sheet with transcription */}
-      <Sheet>
-        <SheetTrigger asChild>
-          <div className="w-full bg-zinc-900/80 backdrop-blur-sm py-2 px-4 flex items-center justify-center">
-            <div className="flex items-center space-x-2 text-sm text-zinc-400">
-              <ChevronUp className="h-4 w-4" />
-              <span>View Transcription</span>
-            </div>
-          </div>
-        </SheetTrigger>
-        <SheetContent side="bottom" className="h-[60vh] overflow-y-auto bg-zinc-950/90 backdrop-blur-xl border-t border-zinc-800">
-          <div className="h-full overflow-y-auto pb-14">
-            <div className="px-1 pt-6 pb-20">
-              <Transcription transcripts={transcripts} keywords={keywords} />
-            </div>
-          </div>
-        </SheetContent>
-      </Sheet>
+      {/* Bottom half - Transcription panel directly visible */}
+      <div className="flex-1 p-3 overflow-hidden">
+        <Transcription transcripts={transcripts} keywords={keywords} />
+      </div>
       
       {/* Bottom controls */}
       <BottomPanel 
