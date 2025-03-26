@@ -40,10 +40,10 @@ const VideoPanels: React.FC<VideoPanelsProps> = ({
   const needsInitialPermissions = hasVideoPermission === null || hasMicPermission === null;
 
   return (
-    <div className="flex flex-col h-full space-y-6">
+    <div className="flex flex-col h-full space-y-4">
       {/* Top panel - Candidate Video */}
       <Card className="h-1/2 glass-panel dark bg-[#111111] shadow-md border-[#333333]/20">
-        <CardContent className="p-3 h-full">
+        <CardContent className="p-2 h-full">
           <div className="rounded-lg overflow-hidden border border-zinc-800/50 bg-black/80 h-full relative backdrop-blur-sm">
             {needsInitialPermissions ? (
               <PermissionRequest 
@@ -79,7 +79,7 @@ const VideoPanels: React.FC<VideoPanelsProps> = ({
       
       {/* Bottom panel - AI Avatar */}
       <Card className="h-1/2 glass-panel dark bg-[#111111] shadow-md border-[#333333]/20">
-        <CardContent className="p-3 h-full">
+        <CardContent className="p-2 h-full">
           <div className="rounded-lg overflow-hidden border border-zinc-800/50 bg-black/80 h-full relative backdrop-blur-sm">
             <VideoDisplay useAiAvatar={true} progress={progress} />
             <ProgressBar progress={progress} />
