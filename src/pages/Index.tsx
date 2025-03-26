@@ -23,7 +23,7 @@ const Index = () => {
   } = useInterviewState();
   
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-black to-[#0a0a0a] text-slate-300">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-black via-black to-zinc-900 text-white">
       <TopBar timer={timer} />
       
       <div className="flex-grow p-4 grid grid-cols-12 gap-4">

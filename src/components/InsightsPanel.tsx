@@ -29,9 +29,9 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
   return (
     <div className="flex flex-col h-full gap-4">
       {/* Top panel - Controls */}
-      <Card className="glass-panel dark bg-[#111111] border border-[#333333]/20 shadow-md">
+      <Card className="bg-zinc-900 border border-zinc-800 shadow-lg">
         <CardContent className="p-4">
-          <h3 className="text-md font-semibold flex items-center text-slate-200 mb-4">
+          <h3 className="text-md font-semibold flex items-center text-white mb-4">
             Interview Controls
           </h3>
           
@@ -39,10 +39,11 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
             <div className="flex gap-3">
               <Button 
                 onClick={isRunning ? onPause : onStart}
-                className={isRunning 
-                  ? "bg-amber-600 hover:bg-amber-700 transition-all duration-300 flex-1" 
-                  : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 transition-all duration-300 shadow-[0_4px_12px_rgba(245,158,11,0.3)] flex-1"}
+                variant={isRunning ? "secondary" : "default"}
                 size="lg"
+                className={isRunning 
+                  ? "bg-zinc-700 hover:bg-zinc-600 text-white transition-all flex-1" 
+                  : "bg-zinc-700 hover:bg-zinc-600 text-white shadow-sm transition-all flex-1"}
               >
                 {isRunning ? (
                   <Pause className="w-5 h-5" />
@@ -55,16 +56,16 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                 onClick={onEnd}
                 variant="destructive"
                 size="lg"
-                className="hover:bg-red-700 transition-all duration-300 shadow-sm flex-1"
+                className="bg-zinc-700 hover:bg-zinc-600 text-white transition-all shadow-sm flex-1"
               >
                 <StopCircle className="w-5 h-5" />
               </Button>
             </div>
             
             <div className="flex items-center justify-between mt-2 px-2">
-              <span className="text-sm text-slate-400">Audio Level</span>
+              <span className="text-sm text-zinc-400">Audio Level</span>
               <div className="flex items-center space-x-2">
-                <Mic className="h-4 w-4 text-slate-400" />
+                <Mic className="h-4 w-4 text-zinc-400" />
                 <div className="audio-level-indicator">
                   {[1, 2, 3, 4, 5].map((level) => (
                     <div 
@@ -73,8 +74,8 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                       style={{ 
                         height: `${8 + level * 3}px`,
                         backgroundColor: level <= audioLevel ? (
-                          level > 3 ? '#FF3B30' : level > 1 ? '#f59e0b' : '#f59e0b'
-                        ) : 'rgba(100, 116, 139, 0.4)'
+                          level > 3 ? '#ef4444' : level > 1 ? '#ffffff' : '#ffffff'
+                        ) : 'rgba(161, 161, 170, 0.4)'
                       }}
                     />
                   ))}
@@ -86,16 +87,16 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
       </Card>
       
       {/* Bottom panel - Red Flags */}
-      <Card className="glass-panel dark bg-[#111111] flex-grow border border-[#333333]/20 shadow-md">
+      <Card className="bg-zinc-900 border border-zinc-800 flex-grow shadow-lg">
         <CardContent className="p-4 h-full">
-          <h3 className="text-md font-semibold flex items-center text-slate-200 mb-3">
-            <Flag className="w-4 h-4 mr-2 text-interview-red" />
+          <h3 className="text-md font-semibold flex items-center text-white mb-3">
+            <Flag className="w-4 h-4 mr-2 text-red-500" />
             Interview Insights
           </h3>
           <ScrollArea className="h-[calc(100%-2rem)]">
-            <div className="bg-black/60 rounded-lg p-4 border border-zinc-800/50 min-h-[90%] backdrop-blur-sm">
+            <div className="bg-black/20 rounded-lg p-4 border border-zinc-800 min-h-[90%]">
               {flags.length === 0 ? (
-                <div className="flex h-full items-center justify-center text-slate-500 text-sm">
+                <div className="flex h-full items-center justify-center text-zinc-500 text-sm">
                   Interview insights will appear here...
                 </div>
               ) : (
@@ -109,7 +110,6 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                           flag.severity === 'high' ? 'rgba(239, 68, 68, 0.15)' :
                           flag.severity === 'medium' ? 'rgba(245, 158, 11, 0.15)' :
                           'rgba(234, 179, 8, 0.15)',
-                        boxShadow: flag.severity === 'high' ? '0 2px 8px rgba(239, 68, 68, 0.1)' : 'none'
                       }}
                     >
                       <div className="flex items-start justify-between">
@@ -123,9 +123,9 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                                 '#eab308'
                             }}
                           />
-                          <p className="text-sm text-slate-300">{flag.text}</p>
+                          <p className="text-sm text-zinc-300">{flag.text}</p>
                         </div>
-                        <ChevronRight className="w-4 h-4 text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <ChevronRight className="w-4 h-4 text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
                     </div>
                   ))}

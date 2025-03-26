@@ -48,28 +48,16 @@
   }
 
   .glass-panel {
-    @apply bg-white/80 backdrop-blur-sm border border-gray-100 shadow-sm rounded-xl;
-  }
-  
-  .glass-panel.dark {
-    @apply bg-slate-800/80 backdrop-blur-sm border border-slate-700 shadow-md rounded-xl;
-  }
-  
-  .glass-button {
-    @apply bg-white/90 backdrop-blur-sm border border-gray-100 shadow-sm hover:bg-white/100 transition-all duration-200;
-  }
-  
-  .glass-button.dark {
-    @apply bg-slate-800/90 backdrop-blur-sm border border-slate-700 shadow-sm hover:bg-slate-700/90 transition-all duration-200;
+    @apply bg-zinc-900 border border-zinc-800 shadow-sm rounded-xl;
   }
   
   .progress-bar {
-    @apply bg-gray-200 rounded-full overflow-hidden;
+    @apply bg-zinc-800 rounded-full overflow-hidden;
     height: 4px;
   }
   
   .progress-bar-inner {
-    @apply bg-interview-blue rounded-full transition-all duration-300 ease-out;
+    @apply bg-white rounded-full transition-all duration-300 ease-out;
     height: 4px;
   }
   
@@ -87,11 +75,7 @@
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 rounded-full;
-  }
-  
-  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-slate-600 rounded-full;
+    @apply bg-zinc-700 rounded-full;
   }
   
   .audio-level-indicator {
@@ -99,17 +83,13 @@
   }
   
   .audio-level-bar {
-    @apply bg-gray-300 rounded-full transition-all duration-150;
+    @apply bg-zinc-700 rounded-full transition-all duration-150;
     width: 3px;
     height: 12px;
   }
   
-  .dark .audio-level-bar {
-    @apply bg-slate-600;
-  }
-  
   .audio-level-bar.active {
-    @apply bg-interview-blue;
+    @apply bg-white;
   }
   
   .fade-enter {
@@ -130,12 +110,6 @@
     transition: opacity 200ms;
   }
   
-  /* Glow effect for dark theme */
-  .glow {
-    box-shadow: 0 0 15px rgba(74, 144, 226, 0.3);
-  }
-  
-  /* Audio visualizer animation */
   @keyframes audio-wave {
     0% { height: 5px; }
     50% { height: 15px; }
