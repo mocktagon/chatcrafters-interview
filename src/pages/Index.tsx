@@ -54,7 +54,7 @@ const Index = () => {
   };
   
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-black via-black to-zinc-900 text-white pb-16">
+    <div className="min-h-screen flex flex-col bg-purple-900 text-white pb-16">
       <TopBar timer={timer} progress={progress} interviewName={interviewName} />
       
       <div className="flex-grow p-4 grid grid-cols-12 gap-4">
