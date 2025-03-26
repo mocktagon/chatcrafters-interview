@@ -4,7 +4,6 @@ import { usePermissionCheck } from './media/usePermissionCheck';
 import { useMediaStream } from './media/useMediaStream';
 import { useAudioAnalyzer } from './media/useAudioAnalyzer';
 import { usePermissionRequest } from './media/usePermissionRequest';
-import { useMicrophoneControl } from './media/useMicrophoneControl';
 import { toast } from 'sonner';
 
 export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
@@ -61,6 +60,7 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
           const newState = !isMicEnabled;
           audioTracks.forEach(track => {
             track.enabled = newState;
+            console.log(`Setting audio track (${track.label}) enabled: ${newState}`);
           });
           setIsMicEnabled(newState);
           console.log(`Microphone ${newState ? 'enabled' : 'disabled'}`);
@@ -85,6 +85,7 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
     // If camera is currently active, we just need to disable it
     if (isCameraActive) {
       setIsCameraActive(false);
+      toast.success("Camera disabled");
       
       // If we have video tracks, disable them instead of stopping
       if (mediaStreamRef.current) {
@@ -92,6 +93,7 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
         if (videoTracks.length > 0) {
           videoTracks.forEach(track => {
             track.enabled = false;
+            console.log(`Setting video track (${track.label}) enabled: false`);
           });
           console.log("Camera tracks disabled");
         }
@@ -105,14 +107,17 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
         console.log("No video stream, requesting camera permission");
         await requestVideoPermission();
         setIsCameraActive(true);
+        toast.success("Camera enabled");
       } else {
         // Enable existing video tracks
         const videoTracks = mediaStreamRef.current.getVideoTracks();
         videoTracks.forEach(track => {
           track.enabled = true;
+          console.log(`Setting video track (${track.label}) enabled: true`);
         });
         setIsCameraActive(true);
         console.log("Camera tracks enabled");
+        toast.success("Camera enabled");
       }
     } catch (error) {
       console.error("Failed to toggle camera:", error);

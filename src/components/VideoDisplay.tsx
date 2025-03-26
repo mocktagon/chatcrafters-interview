@@ -17,19 +17,35 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
   isCameraEnabled = true
 }) => {
   const [videoError, setVideoError] = useState<boolean>(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false);
 
   // This effect ensures the video plays once the videoRef is populated
   useEffect(() => {
     if (videoRef?.current && videoRef.current.srcObject) {
       console.log("Video element present with srcObject, attempting to play");
-      videoRef.current.play().catch(err => {
-        console.error("Error playing video:", err);
-        setVideoError(true);
-      });
+      
+      // Try to play the video
+      const playVideo = async () => {
+        try {
+          await videoRef.current!.play();
+          setIsVideoPlaying(true);
+          setVideoError(false);
+          console.log("Video playing successfully");
+        } catch (err) {
+          console.error("Error playing video:", err);
+          setVideoError(true);
+          setIsVideoPlaying(false);
+        }
+      };
+      
+      playVideo();
+    } else {
+      setIsVideoPlaying(false);
     }
 
     return () => {
       setVideoError(false);
+      setIsVideoPlaying(false);
     };
   }, [videoRef, videoRef?.current?.srcObject]);
 
@@ -47,7 +63,8 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
                      hasVideoPermission === false || 
                      hasVideoPermission === null ||
                      videoError ||
-                     !videoRef?.current?.srcObject;
+                     !videoRef?.current?.srcObject ||
+                     !isVideoPlaying;
 
   return (
     <div className="h-full w-full flex items-center justify-center bg-black/50 rounded-lg">
