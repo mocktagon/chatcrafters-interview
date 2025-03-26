@@ -7,12 +7,14 @@ interface VideoDisplayProps {
   progress: number;
   videoRef?: React.RefObject<HTMLVideoElement>;
   hasVideoPermission?: boolean | null;
+  isCameraEnabled?: boolean;
 }
 
 const VideoDisplay: React.FC<VideoDisplayProps> = ({ 
   useAiAvatar, 
   videoRef,
-  hasVideoPermission 
+  hasVideoPermission,
+  isCameraEnabled = true
 }) => {
   // This effect ensures the video plays once the videoRef is populated
   useEffect(() => {
@@ -31,23 +33,21 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
       return <AvatarDisplay type="ai" />;
     }
 
-    // Show the video element regardless of permission state, but it will only display content
-    // when the stream is actually available
+    // Show avatar if camera is disabled or no permission
+    const showAvatar = !isCameraEnabled || hasVideoPermission === false || hasVideoPermission === null;
+
     return (
       <div className="relative w-full h-full">
-        <video 
-          ref={videoRef} 
-          autoPlay 
-          playsInline 
-          muted 
-          className="w-full h-full object-cover"
-        />
-        {hasVideoPermission === false && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <AvatarDisplay type="user" />
-          </div>
+        {!showAvatar && (
+          <video 
+            ref={videoRef} 
+            autoPlay 
+            playsInline 
+            muted 
+            className="w-full h-full object-cover"
+          />
         )}
-        {hasVideoPermission === null && (
+        {showAvatar && (
           <div className="absolute inset-0 flex items-center justify-center">
             <AvatarDisplay type="user" />
           </div>

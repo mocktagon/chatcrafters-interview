@@ -1,0 +1,87 @@
+
+import React from 'react';
+import { StopCircle, Mic, MicOff, Camera, CameraOff } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import AudioVisualizer from './video/AudioVisualizer';
+import { toast } from 'sonner';
+
+interface BottomPanelProps {
+  isRunning: boolean;
+  audioLevel: number;
+  isMicEnabled: boolean;
+  isCameraEnabled: boolean;
+  onToggleMic: () => void;
+  onToggleCamera: () => void;
+  onEnd: () => void;
+}
+
+const BottomPanel: React.FC<BottomPanelProps> = ({
+  isRunning,
+  audioLevel,
+  isMicEnabled,
+  isCameraEnabled,
+  onToggleMic,
+  onToggleCamera,
+  onEnd
+}) => {
+  const handleEnd = () => {
+    onEnd();
+    toast.info("Interview ended", {
+      description: "The interview has been successfully ended.",
+      position: "bottom-right"
+    });
+  };
+
+  return (
+    <div className="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur border-t border-zinc-800 py-3 px-6 z-10">
+      <div className="container mx-auto flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={onToggleMic}
+            className={`rounded-full ${!isMicEnabled ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30 border-red-500/50' : 'bg-zinc-800 hover:bg-zinc-700 border-zinc-700'}`}
+          >
+            {isMicEnabled ? (
+              <Mic className="h-5 w-5 stroke-[2.5px]" />
+            ) : (
+              <MicOff className="h-5 w-5 stroke-[2.5px]" />
+            )}
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={onToggleCamera}
+            className={`rounded-full ${!isCameraEnabled ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30 border-red-500/50' : 'bg-zinc-800 hover:bg-zinc-700 border-zinc-700'}`}
+          >
+            {isCameraEnabled ? (
+              <Camera className="h-5 w-5 stroke-[2.5px]" />
+            ) : (
+              <CameraOff className="h-5 w-5 stroke-[2.5px]" />
+            )}
+          </Button>
+        </div>
+        
+        <div className="flex items-center">
+          <Button
+            onClick={handleEnd}
+            variant="default"
+            size="lg"
+            className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white transition-all shadow-sm"
+          >
+            <StopCircle className="w-5 h-5 stroke-[2.5px] mr-2" />
+            End Interview
+          </Button>
+        </div>
+        
+        <div className="flex items-center space-x-2">
+          <div className="text-xs text-zinc-400 mr-2">Audio</div>
+          <AudioVisualizer audioLevel={audioLevel} enabled={isMicEnabled} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BottomPanel;

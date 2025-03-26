@@ -1,12 +1,16 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import TopBar from '@/components/TopBar';
 import VideoPanels from '@/components/VideoPanels';
 import TranscriptionPanel from '@/components/TranscriptionPanel';
 import InsightsPanel from '@/components/InsightsPanel';
+import BottomPanel from '@/components/BottomPanel';
 import { useInterviewState } from '@/hooks/useInterviewState';
+import { useMediaHandler } from '@/hooks/useMediaHandler';
 
 const Index = () => {
+  const [isCameraEnabled, setIsCameraEnabled] = useState(true);
+
   const {
     isRunning,
     timer,
@@ -23,38 +27,55 @@ const Index = () => {
     handleAudioLevelChange
   } = useInterviewState();
   
+  const {
+    hasMicPermission,
+    isMicEnabled,
+    toggleMicrophone
+  } = useMediaHandler(handleAudioLevelChange);
+
+  const handleToggleMic = () => {
+    toggleMicrophone();
+  };
+
+  const handleToggleCamera = () => {
+    setIsCameraEnabled(!isCameraEnabled);
+  };
+  
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-black via-black to-zinc-900 text-white">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-black via-black to-zinc-900 text-white pb-16">
       <TopBar timer={timer} />
       
       <div className="flex-grow p-4 grid grid-cols-12 gap-4">
-        {/* First column: Video displays stacked vertically (3 cols) */}
-        <div className="col-span-3">
+        {/* First column: Video displays stacked vertically (4 cols) */}
+        <div className="col-span-4">
           <VideoPanels 
             isRunning={isRunning} 
             progress={progress} 
             audioLevel={audioLevel}
             onAudioLevelChange={handleAudioLevelChange}
+            isCameraEnabled={isCameraEnabled}
           />
         </div>
         
-        {/* Second column: Transcriptions (Enlarged) (6 cols) */}
-        <div className="col-span-6">
+        {/* Second column: Transcriptions (Enlarged) (8 cols) */}
+        <div className="col-span-8">
           <TranscriptionPanel transcripts={transcripts} keywords={keywords} />
         </div>
-        
-        {/* Third column: Controls and Insights (3 cols) */}
-        <div className="col-span-3">
-          <InsightsPanel 
-            flags={flags} 
-            isRunning={isRunning}
-            onStart={handleStart}
-            onPause={handlePause}
-            onEnd={handleEnd}
-            audioLevel={audioLevel}
-          />
-        </div>
       </div>
+      
+      {/* Bottom panel with controls */}
+      <BottomPanel 
+        isRunning={isRunning}
+        audioLevel={audioLevel}
+        isMicEnabled={isMicEnabled}
+        isCameraEnabled={isCameraEnabled}
+        onToggleMic={handleToggleMic}
+        onToggleCamera={handleToggleCamera}
+        onEnd={handleEnd}
+      />
+      
+      {/* Invisible component that handles showing insight toasts */}
+      <InsightsPanel flags={flags} />
     </div>
   );
 };

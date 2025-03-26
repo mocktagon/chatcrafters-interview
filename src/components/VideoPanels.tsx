@@ -12,13 +12,15 @@ interface VideoPanelsProps {
   progress: number;
   audioLevel: number;
   onAudioLevelChange: (level: number) => void;
+  isCameraEnabled?: boolean;
 }
 
 const VideoPanels: React.FC<VideoPanelsProps> = ({ 
   isRunning, 
   progress, 
   audioLevel, 
-  onAudioLevelChange 
+  onAudioLevelChange,
+  isCameraEnabled = true
 }) => {
   const {
     hasVideoPermission,
@@ -62,14 +64,7 @@ const VideoPanels: React.FC<VideoPanelsProps> = ({
               progress={0} 
               videoRef={videoRef}
               hasVideoPermission={hasVideoPermission}
-            />
-            
-            <VideoControls 
-              hasMicPermission={hasMicPermission}
-              isMicEnabled={isMicEnabled}
-              audioLevel={audioLevel}
-              onToggleMicrophone={toggleMicrophone}
-              onRequestMicPermission={requestMicPermission}
+              isCameraEnabled={isCameraEnabled}
             />
           </div>
         </CardContent>
