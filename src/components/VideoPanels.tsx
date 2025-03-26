@@ -51,7 +51,17 @@ const VideoPanels: React.FC<VideoPanelsProps> = ({
 
   return (
     <div className="flex flex-col h-full space-y-3">
-      {/* Top panel - Candidate Video */}
+      {/* Top panel - AI Avatar (swapped from bottom) */}
+      <Card className="h-1/2 glass-panel dark bg-[#111111] shadow-md border-[#333333]/20">
+        <CardContent className="p-2 h-full">
+          <div className="rounded-lg overflow-hidden border border-zinc-800/50 bg-black/80 h-full relative backdrop-blur-sm">
+            <VideoDisplay useAiAvatar={true} progress={progress} />
+            <ProgressBar progress={progress} />
+          </div>
+        </CardContent>
+      </Card>
+      
+      {/* Bottom panel - Candidate Video (swapped from top) */}
       <Card className="h-1/2 glass-panel dark bg-[#111111] shadow-md border-[#333333]/20">
         <CardContent className="p-2 h-full">
           <div className="rounded-lg overflow-hidden border border-zinc-800/50 bg-black/80 h-full relative backdrop-blur-sm">
@@ -83,16 +93,6 @@ const VideoPanels: React.FC<VideoPanelsProps> = ({
               audioLevel={audioLevel}
               enabled={hasMicPermission === true && isMicEnabled}
             />
-          </div>
-        </CardContent>
-      </Card>
-      
-      {/* Bottom panel - AI Avatar */}
-      <Card className="h-1/2 glass-panel dark bg-[#111111] shadow-md border-[#333333]/20">
-        <CardContent className="p-2 h-full">
-          <div className="rounded-lg overflow-hidden border border-zinc-800/50 bg-black/80 h-full relative backdrop-blur-sm">
-            <VideoDisplay useAiAvatar={true} progress={progress} />
-            <ProgressBar progress={progress} />
           </div>
         </CardContent>
       </Card>
