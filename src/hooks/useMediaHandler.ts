@@ -24,6 +24,9 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
   
   const { setupAudioAnalyzer } = useAudioAnalyzer(mediaStreamRef.current, onAudioLevelChange);
 
+  // Initialize isMicEnabled state before passing it to other hooks
+  const [isMicEnabled, setIsMicEnabled] = useState(false);
+
   const {
     isRequestingPermission,
     requestMediaPermissions,
@@ -40,8 +43,6 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
   });
 
   const {
-    isMicEnabled,
-    setIsMicEnabled,
     toggleMicrophone
   } = useMicrophoneControl({
     mediaStreamRef,

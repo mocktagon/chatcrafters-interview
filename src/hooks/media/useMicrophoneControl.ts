@@ -38,7 +38,6 @@ export function useMicrophoneControl({
 
   return {
     isMicEnabled,
-    setIsMicEnabled,
     toggleMicrophone
   };
 }
