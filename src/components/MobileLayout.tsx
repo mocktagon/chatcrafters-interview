@@ -10,6 +10,7 @@ import { ChevronUp } from 'lucide-react';
 import Transcription from './Transcription';
 import InsightsPanel from './InsightsPanel';
 import { Transcript } from '@/types/interview';
+import { useMediaHandler } from '@/hooks/useMediaHandler';
 
 interface MobileLayoutProps {
   timer: string;
@@ -50,6 +51,11 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
   onEnd,
   onNext
 }) => {
+  const {
+    videoRef,
+    hasVideoPermission
+  } = useMediaHandler(onAudioLevelChange);
+  
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 text-white relative">
       {/* Header with timer */}
@@ -70,7 +76,8 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
             <VideoDisplay 
               useAiAvatar={false} 
               progress={0} 
-              hasVideoPermission={true}
+              videoRef={videoRef}
+              hasVideoPermission={hasVideoPermission}
               isCameraEnabled={isCameraEnabled}
             />
           </div>
