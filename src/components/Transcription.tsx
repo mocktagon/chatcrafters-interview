@@ -30,7 +30,7 @@ const Transcription: React.FC<TranscriptionProps> = ({ transcripts, keywords = [
             Interview transcription will appear here...
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {transcripts.map((item) => (
               <div key={item.id} className="animate-scale-in">
                 <div className="flex justify-between items-center mb-1">
