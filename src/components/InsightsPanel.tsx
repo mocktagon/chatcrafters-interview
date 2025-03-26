@@ -29,7 +29,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
   return (
     <div className="flex flex-col h-full gap-4">
       {/* Top panel - Controls */}
-      <Card className="glass-panel dark bg-[#1A1F2C]">
+      <Card className="glass-panel dark bg-[#1A1F2C] border border-[#7E69AB]/20 shadow-md">
         <CardContent className="p-4">
           <h3 className="text-md font-semibold flex items-center text-slate-200 mb-4">
             Interview Controls
@@ -38,7 +38,9 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
           <div className="flex flex-col gap-3">
             <Button 
               onClick={isRunning ? onPause : onStart}
-              className={isRunning ? "bg-amber-600 hover:bg-amber-700" : "bg-[#9b87f5] hover:bg-[#7E69AB]"}
+              className={isRunning 
+                ? "bg-amber-600 hover:bg-amber-700 transition-all duration-300" 
+                : "bg-gradient-to-r from-[#9b87f5] to-[#7E69AB] hover:from-[#8a76e4] hover:to-[#6d5a9c] transition-all duration-300 shadow-[0_4px_12px_rgba(155,135,245,0.3)]"}
               size="lg"
             >
               {isRunning ? (
@@ -58,6 +60,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
               onClick={onEnd}
               variant="destructive"
               size="lg"
+              className="hover:bg-red-700 transition-all duration-300 shadow-sm"
             >
               <StopCircle className="w-5 h-5" />
               End Interview
@@ -72,7 +75,12 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                     <div 
                       key={level}
                       className={`audio-level-bar ${level <= audioLevel ? 'active' : ''}`}
-                      style={{ height: `${8 + level * 3}px` }}
+                      style={{ 
+                        height: `${8 + level * 3}px`,
+                        backgroundColor: level <= audioLevel ? (
+                          level > 3 ? '#FF3B30' : level > 1 ? '#9b87f5' : '#9b87f5'
+                        ) : 'rgba(100, 116, 139, 0.4)'
+                      }}
                     />
                   ))}
                 </div>
@@ -83,14 +91,14 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
       </Card>
       
       {/* Bottom panel - Red Flags */}
-      <Card className="glass-panel dark bg-[#1A1F2C] flex-grow">
+      <Card className="glass-panel dark bg-[#1A1F2C] flex-grow border border-[#7E69AB]/20 shadow-md">
         <CardContent className="p-4 h-full">
           <h3 className="text-md font-semibold flex items-center text-slate-200 mb-3">
             <Flag className="w-4 h-4 mr-2 text-interview-red" />
             Interview Insights
           </h3>
           <ScrollArea className="h-[calc(100%-2rem)]">
-            <div className="bg-slate-800/60 rounded-lg p-4 border border-slate-700 min-h-[90%]">
+            <div className="bg-slate-800/60 rounded-lg p-4 border border-slate-700/50 min-h-[90%] backdrop-blur-sm">
               {flags.length === 0 ? (
                 <div className="flex h-full items-center justify-center text-slate-500 text-sm">
                   Interview insights will appear here...
@@ -100,12 +108,13 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                   {flags.map((flag) => (
                     <div 
                       key={flag.id} 
-                      className="p-3 rounded-md animate-scale-in"
+                      className="p-3 rounded-md animate-scale-in transition-all duration-300 hover:translate-y-[-2px]"
                       style={{
                         backgroundColor: 
                           flag.severity === 'high' ? 'rgba(239, 68, 68, 0.15)' :
                           flag.severity === 'medium' ? 'rgba(245, 158, 11, 0.15)' :
-                          'rgba(234, 179, 8, 0.15)'
+                          'rgba(234, 179, 8, 0.15)',
+                        boxShadow: flag.severity === 'high' ? '0 2px 8px rgba(239, 68, 68, 0.1)' : 'none'
                       }}
                     >
                       <div className="flex items-start">
