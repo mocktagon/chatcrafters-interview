@@ -42,13 +42,13 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                 variant="default"
                 size="lg"
                 className={isRunning 
-                  ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white transition-all flex-1" 
+                  ? "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white transition-all flex-1" 
                   : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-sm transition-all flex-1"}
               >
                 {isRunning ? (
-                  <Pause className="w-5 h-5" />
+                  <Pause className="w-5 h-5 stroke-[2.5px]" />
                 ) : (
-                  <Play className="w-5 h-5" />
+                  <Play className="w-5 h-5 stroke-[2.5px]" />
                 )}
               </Button>
               
@@ -58,7 +58,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                 size="lg"
                 className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white transition-all shadow-sm flex-1"
               >
-                <StopCircle className="w-5 h-5" />
+                <StopCircle className="w-5 h-5 stroke-[2.5px]" />
               </Button>
             </div>
             
