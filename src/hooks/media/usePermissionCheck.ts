@@ -9,33 +9,42 @@ export function usePermissionCheck() {
   useEffect(() => {
     const checkPermissions = async () => {
       try {
-        // Check camera permission
+        // First try to use Permissions API (not supported in all browsers)
         try {
+          // Check camera permission
           const cameraPermission = await navigator.permissions.query({ name: 'camera' as PermissionName });
           if (cameraPermission.state === 'denied') {
             setHasVideoPermission(false);
             toast.error("Camera access is blocked. Please update your browser settings to allow camera access.");
           } else if (cameraPermission.state === 'granted') {
             setHasVideoPermission(true);
+          } else {
+            // 'prompt' state - we'll handle this when user attempts to access camera
+            setHasVideoPermission(null);
           }
-        } catch (error) {
-          console.log("Camera Permissions API not fully supported");
-        }
-        
-        // Check microphone permission
-        try {
+          
+          // Check microphone permission
           const micPermission = await navigator.permissions.query({ name: 'microphone' as PermissionName });
           if (micPermission.state === 'denied') {
             setHasMicPermission(false);
             toast.error("Microphone access is blocked. Please update your browser settings to allow microphone access.");
           } else if (micPermission.state === 'granted') {
             setHasMicPermission(true);
+          } else {
+            // 'prompt' state - we'll handle this when user attempts to access mic
+            setHasMicPermission(null);
           }
         } catch (error) {
-          console.log("Microphone Permissions API not fully supported");
+          console.log("Permissions API not fully supported, will check permissions during access attempt");
+          // If Permissions API fails, we'll rely on getUserMedia results
+          setHasVideoPermission(null);
+          setHasMicPermission(null);
         }
       } catch (error) {
-        console.log("Permissions API not fully supported", error);
+        console.log("Permissions API error:", error);
+        // Default to null (unknown) state if Permissions API fails
+        setHasVideoPermission(null);
+        setHasMicPermission(null);
       }
     };
     

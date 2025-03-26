@@ -8,10 +8,13 @@ export function useMediaStream() {
 
   const getMediaStream = async (constraints: MediaStreamConstraints): Promise<MediaStream | null> => {
     try {
+      console.log("Requesting media with constraints:", constraints);
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      console.log("Media stream obtained:", stream);
       mediaStreamRef.current = stream;
       
       if (constraints.video && stream.getVideoTracks().length > 0) {
+        console.log("Updating video stream");
         updateVideoStream(stream);
       }
       
@@ -37,10 +40,13 @@ export function useMediaStream() {
 
   const updateVideoStream = (stream: MediaStream) => {
     if (videoRef.current) {
+      console.log("Setting stream to video element");
       videoRef.current.srcObject = stream;
       videoRef.current.play().catch(err => {
         console.error("Error playing video:", err);
       });
+    } else {
+      console.warn("Video ref is not available");
     }
   };
 
