@@ -1,16 +1,13 @@
 
 import React, { useRef, useEffect } from 'react';
+import { Transcript } from '@/types/interview';
 
 interface TranscriptionProps {
-  transcripts: Array<{
-    id: number;
-    text: string;
-    speaker: 'ai' | 'user';
-    timestamp: string;
-  }>;
+  transcripts: Transcript[];
+  keywords?: string[];
 }
 
-const Transcription: React.FC<TranscriptionProps> = ({ transcripts }) => {
+const Transcription: React.FC<TranscriptionProps> = ({ transcripts, keywords = [] }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
