@@ -23,21 +23,24 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
       videoRef.current.play().catch(err => {
         console.error("Error playing video:", err);
       });
-    } else if (videoRef?.current) {
-      console.log("Video element present but no srcObject");
     }
   }, [videoRef]);
 
-  const renderContent = () => {
-    if (useAiAvatar) {
-      return <AvatarDisplay type="ai" />;
-    }
-
-    // Show avatar if camera is disabled or no permission
-    const showAvatar = !isCameraEnabled || hasVideoPermission === false || hasVideoPermission === null;
-
+  // If it's an AI avatar, just render that
+  if (useAiAvatar) {
     return (
-      <div className="relative w-full h-full">
+      <div className="h-full w-full flex items-center justify-center bg-black/50 rounded-lg">
+        <AvatarDisplay type="ai" />
+      </div>
+    );
+  }
+
+  // Determine if we should show the user avatar or video
+  const showAvatar = !isCameraEnabled || hasVideoPermission === false || hasVideoPermission === null;
+
+  return (
+    <div className="h-full w-full flex items-center justify-center bg-black/50 rounded-lg">
+      <div className="w-full h-full relative">
         {!showAvatar && (
           <video 
             ref={videoRef} 
@@ -47,19 +50,12 @@ const VideoDisplay: React.FC<VideoDisplayProps> = ({
             className="w-full h-full object-cover"
           />
         )}
+        
         {showAvatar && (
           <div className="absolute inset-0 flex items-center justify-center">
             <AvatarDisplay type="user" />
           </div>
         )}
-      </div>
-    );
-  };
-
-  return (
-    <div className="h-full w-full flex items-center justify-center bg-black/50 rounded-lg">
-      <div className="w-full h-full flex items-center justify-center">
-        {renderContent()}
       </div>
     </div>
   );
