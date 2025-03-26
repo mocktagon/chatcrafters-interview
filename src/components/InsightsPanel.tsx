@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { Flag, Mic, Play, Pause, StopCircle } from 'lucide-react';
+import { Flag, Play, Pause, StopCircle, Mic, ChevronRight } from 'lucide-react';
 
 interface InsightsPanelProps {
   flags: Array<{
@@ -36,35 +36,30 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
           </h3>
           
           <div className="flex flex-col gap-3">
-            <Button 
-              onClick={isRunning ? onPause : onStart}
-              className={isRunning 
-                ? "bg-amber-600 hover:bg-amber-700 transition-all duration-300" 
-                : "bg-gradient-to-r from-[#9b87f5] to-[#7E69AB] hover:from-[#8a76e4] hover:to-[#6d5a9c] transition-all duration-300 shadow-[0_4px_12px_rgba(155,135,245,0.3)]"}
-              size="lg"
-            >
-              {isRunning ? (
-                <>
+            <div className="flex gap-3">
+              <Button 
+                onClick={isRunning ? onPause : onStart}
+                className={isRunning 
+                  ? "bg-amber-600 hover:bg-amber-700 transition-all duration-300 flex-1" 
+                  : "bg-gradient-to-r from-[#9b87f5] to-[#7E69AB] hover:from-[#8a76e4] hover:to-[#6d5a9c] transition-all duration-300 shadow-[0_4px_12px_rgba(155,135,245,0.3)] flex-1"}
+                size="lg"
+              >
+                {isRunning ? (
                   <Pause className="w-5 h-5" />
-                  Pause Interview
-                </>
-              ) : (
-                <>
+                ) : (
                   <Play className="w-5 h-5" />
-                  Start Interview
-                </>
-              )}
-            </Button>
-            
-            <Button 
-              onClick={onEnd}
-              variant="destructive"
-              size="lg"
-              className="hover:bg-red-700 transition-all duration-300 shadow-sm"
-            >
-              <StopCircle className="w-5 h-5" />
-              End Interview
-            </Button>
+                )}
+              </Button>
+              
+              <Button 
+                onClick={onEnd}
+                variant="destructive"
+                size="lg"
+                className="hover:bg-red-700 transition-all duration-300 shadow-sm flex-1"
+              >
+                <StopCircle className="w-5 h-5" />
+              </Button>
+            </div>
             
             <div className="flex items-center justify-between mt-2 px-2">
               <span className="text-sm text-slate-400">Audio Level</span>
@@ -108,7 +103,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                   {flags.map((flag) => (
                     <div 
                       key={flag.id} 
-                      className="p-3 rounded-md animate-scale-in transition-all duration-300 hover:translate-y-[-2px]"
+                      className="p-3 rounded-md animate-scale-in transition-all duration-300 hover:translate-y-[-2px] group cursor-pointer"
                       style={{
                         backgroundColor: 
                           flag.severity === 'high' ? 'rgba(239, 68, 68, 0.15)' :
@@ -117,17 +112,20 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                         boxShadow: flag.severity === 'high' ? '0 2px 8px rgba(239, 68, 68, 0.1)' : 'none'
                       }}
                     >
-                      <div className="flex items-start">
-                        <div
-                          className="w-2 h-2 mt-1.5 rounded-full mr-2 flex-shrink-0"
-                          style={{
-                            backgroundColor:
-                              flag.severity === 'high' ? '#ef4444' :
-                              flag.severity === 'medium' ? '#f59e0b' :
-                              '#eab308'
-                          }}
-                        />
-                        <p className="text-sm text-slate-300">{flag.text}</p>
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start flex-1">
+                          <div
+                            className="w-2 h-2 mt-1.5 rounded-full mr-2 flex-shrink-0"
+                            style={{
+                              backgroundColor:
+                                flag.severity === 'high' ? '#ef4444' :
+                                flag.severity === 'medium' ? '#f59e0b' :
+                                '#eab308'
+                            }}
+                          />
+                          <p className="text-sm text-slate-300">{flag.text}</p>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
                     </div>
                   ))}
