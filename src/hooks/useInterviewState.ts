@@ -1,18 +1,8 @@
 
 import { useState, useEffect } from 'react';
-
-interface Transcript {
-  id: number;
-  text: string;
-  speaker: 'ai' | 'user';
-  timestamp: string;
-}
-
-interface Flag {
-  id: number;
-  text: string;
-  severity: 'low' | 'medium' | 'high';
-}
+import { Transcript, Flag, SentimentType } from '../types/interview';
+import { setupDemoData } from '../utils/demoInterviewData';
+import { formatTimer, calculateProgress } from '../utils/timerUtils';
 
 export function useInterviewState() {
   const [isRunning, setIsRunning] = useState(false);
@@ -23,7 +13,7 @@ export function useInterviewState() {
   const [interviewType] = useState('behavioral');
   const [transcripts, setTranscripts] = useState<Transcript[]>([]);
   const [flags, setFlags] = useState<Flag[]>([]);
-  const [sentiment, setSentiment] = useState<'positive' | 'neutral' | 'negative'>('neutral');
+  const [sentiment, setSentiment] = useState<SentimentType>('neutral');
   const [keywords, setKeywords] = useState<string[]>([]);
   const [insightScore, setInsightScore] = useState(0);
 
@@ -35,12 +25,10 @@ export function useInterviewState() {
       interval = setInterval(() => {
         setSeconds(prev => {
           const newSeconds = prev + 1;
-          const minutes = Math.floor(newSeconds / 60);
-          const remainingSeconds = newSeconds % 60;
-          setTimer(`${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`);
+          setTimer(formatTimer(newSeconds));
           
           // Update progress
-          setProgress(Math.min(newSeconds / 180 * 100, 100));
+          setProgress(calculateProgress(newSeconds));
           
           return newSeconds;
         });
@@ -50,99 +38,21 @@ export function useInterviewState() {
     return () => clearInterval(interval);
   }, [isRunning]);
   
-  // Demo data effect - adds sample transcripts and flags when interview is running
+  // Demo data effect
   useEffect(() => {
     if (!isRunning) return;
     
-    // Demo: Add sample AI message after 3 seconds
-    const aiMessageTimeout = setTimeout(() => {
-      if (!isRunning) return;
-      
-      setTranscripts(prev => [
-        ...prev,
-        {
-          id: Date.now(),
-          text: "Tell me about a challenging project you've worked on and how you overcame obstacles.",
-          speaker: 'ai',
-          timestamp: timer
-        }
-      ]);
-    }, 3000);
+    const cleanupFn = setupDemoData(
+      isRunning,
+      setTranscripts,
+      setFlags,
+      setSentiment,
+      setKeywords,
+      setInsightScore,
+      timer
+    );
     
-    // Demo: Add sample user response after 8 seconds
-    const userResponseTimeout = setTimeout(() => {
-      if (!isRunning) return;
-      
-      setTranscripts(prev => [
-        ...prev,
-        {
-          id: Date.now(),
-          text: "In my previous role, I led a team that was tasked with migrating our legacy system to a modern architecture...",
-          speaker: 'user',
-          timestamp: timer
-        }
-      ]);
-    }, 8000);
-    
-    // Demo: Add sample red flag after 12 seconds
-    const redFlagTimeout = setTimeout(() => {
-      if (!isRunning) return;
-      
-      setFlags(prev => [
-        ...prev,
-        {
-          id: Date.now(),
-          text: "Candidate used vague descriptions without specific metrics or outcomes",
-          severity: 'medium'
-        }
-      ]);
-    }, 12000);
-    
-    // Demo: Add another AI message after 15 seconds
-    const followupTimeout = setTimeout(() => {
-      if (!isRunning) return;
-      
-      setTranscripts(prev => [
-        ...prev,
-        {
-          id: Date.now(),
-          text: "That's interesting. Could you share some specific metrics that demonstrate the impact of your solution?",
-          speaker: 'ai',
-          timestamp: timer
-        }
-      ]);
-    }, 15000);
-    
-    // Demo: Add a high severity flag after 20 seconds
-    const highFlagTimeout = setTimeout(() => {
-      if (!isRunning) return;
-      
-      setFlags(prev => [
-        ...prev,
-        {
-          id: Date.now(),
-          text: "Candidate showed signs of exaggeration when discussing their role in the project",
-          severity: 'high'
-        }
-      ]);
-    }, 20000);
-    
-    // Demo: Add sentiment analysis after 10 seconds
-    const sentimentTimeout = setTimeout(() => {
-      if (!isRunning) return;
-      setSentiment('positive');
-      setKeywords(['leadership', 'collaboration', 'problem-solving']);
-      setInsightScore(78);
-    }, 10000);
-    
-    return () => {
-      clearTimeout(aiMessageTimeout);
-      clearTimeout(userResponseTimeout);
-      clearTimeout(redFlagTimeout);
-      clearTimeout(followupTimeout);
-      clearTimeout(highFlagTimeout);
-      clearTimeout(sentimentTimeout);
-    };
+    return cleanupFn;
   }, [isRunning, timer]);
 
   const handleStart = () => {
