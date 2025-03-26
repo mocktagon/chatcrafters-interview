@@ -39,12 +39,12 @@ const PermissionRequest: React.FC<PermissionRequestProps> = ({
         )}
       </div>
       
-      <h3 className="text-white font-medium text-xs mb-1 text-center">
+      <h3 className="text-white font-medium text-xs sm:text-sm mb-1 text-center">
         {isMediaRequest 
           ? 'Enable Camera & Mic'
           : `Enable ${isCameraRequest ? 'Camera' : 'Microphone'}`}
       </h3>
-      <p className="text-slate-300 text-[10px] mb-2 text-center">
+      <p className="text-slate-300 text-[10px] sm:text-xs mb-2 text-center">
         {isMediaRequest
           ? 'Tap to allow access'
           : `Tap to allow ${isCameraRequest ? 'camera' : 'microphone'} access`}
@@ -68,6 +68,10 @@ const PermissionRequest: React.FC<PermissionRequestProps> = ({
           </span>
         </div>
       </Button>
+      
+      <p className="text-slate-400 text-[8px] sm:text-[10px] mt-2 text-center max-w-xs">
+        If you see a browser permission popup, please click "Allow" to enable your {isCameraRequest ? 'camera' : isMediaRequest ? 'devices' : 'microphone'}
+      </p>
     </div>
   );
 };

@@ -10,9 +10,30 @@ export function useMediaStream() {
     try {
       console.log("Requesting media with constraints:", JSON.stringify(constraints));
       
-      // Safari may need a timeout before requesting permissions
+      // Safari needs a timeout before requesting permissions
       if (navigator.userAgent.includes('Safari') && !navigator.userAgent.includes('Chrome')) {
-        await new Promise(resolve => setTimeout(resolve, 300));
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+      
+      // Check if browser supports getUserMedia
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error("getUserMedia is not supported in this browser");
+      }
+      
+      // Special handling for iOS Safari
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      if (isIOS) {
+        // iOS Safari needs special handling for video constraints
+        if (constraints.video && typeof constraints.video === 'boolean') {
+          constraints = {
+            ...constraints,
+            video: {
+              facingMode: 'user',
+              width: { ideal: 1280 },
+              height: { ideal: 720 }
+            }
+          };
+        }
       }
       
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -44,6 +65,8 @@ export function useMediaStream() {
         } else if (constraints.audio) {
           toast.error("No microphone found on this device");
         }
+      } else if (error.name === 'NotSupportedError') {
+        toast.error("Your browser doesn't support media devices");
       } else {
         toast.error(`Error: ${error.message || 'Unknown media error'}`);
       }
@@ -62,6 +85,12 @@ export function useMediaStream() {
       }
       
       videoRef.current.srcObject = stream;
+      
+      // Make sure autoplay works even on mobile browsers
+      videoRef.current.setAttribute('playsinline', '');
+      videoRef.current.setAttribute('autoplay', '');
+      videoRef.current.setAttribute('muted', '');
+      
       videoRef.current.play().catch(err => {
         console.error("Error playing video:", err);
       });
