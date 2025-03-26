@@ -31,7 +31,7 @@ const InterviewControls: React.FC<InterviewControlsProps> = ({
           Interview Type
         </label>
         <Select value={interviewType} onValueChange={setInterviewType}>
-          <SelectTrigger className="w-full bg-white border border-interview-border rounded-lg focus:ring-interview-blue">
+          <SelectTrigger className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white border-none hover:from-blue-600 hover:to-blue-700 rounded-lg focus:ring-blue-400">
             <SelectValue placeholder="Select type" />
           </SelectTrigger>
           <SelectContent>
@@ -52,14 +52,14 @@ const InterviewControls: React.FC<InterviewControlsProps> = ({
           </span>
         </div>
         <div className="flex items-center space-x-2">
-          <User className={`h-4 w-4 ${!useAiAvatar ? 'text-interview-blue' : 'text-gray-400'}`} />
+          <User className={`h-4 w-4 ${!useAiAvatar ? 'text-purple-500' : 'text-gray-400'}`} />
           <Switch
             id="ai-toggle"
             checked={useAiAvatar}
             onCheckedChange={setUseAiAvatar}
-            className="data-[state=checked]:bg-interview-blue"
+            className="data-[state=checked]:bg-purple-600"
           />
-          <Bot className={`h-4 w-4 ${useAiAvatar ? 'text-interview-blue' : 'text-gray-400'}`} />
+          <Bot className={`h-4 w-4 ${useAiAvatar ? 'text-purple-600' : 'text-gray-400'}`} />
         </div>
       </div>
     </div>
