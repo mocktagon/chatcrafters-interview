@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,7 +13,20 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
-      <Sonner />
+      <Sonner 
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            background: "rgba(20, 20, 30, 0.95)",
+            color: "white",
+            border: "1px solid rgba(88, 88, 100, 0.4)",
+            minWidth: "280px",
+          },
+          className: "my-toast-class",
+        }}
+        gap={8}
+        closeButton={true}
+      />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />

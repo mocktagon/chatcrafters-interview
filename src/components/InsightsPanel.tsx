@@ -12,7 +12,7 @@ interface InsightsPanelProps {
 }
 
 const InsightsPanel: React.FC<InsightsPanelProps> = ({ flags }) => {
-  const [lastProcessedId, setLastProcessedId] = useState<number | null>(null);
+  const [processedIds, setProcessedIds] = useState<number[]>([]);
 
   useEffect(() => {
     // Display new flags as toast notifications
@@ -22,26 +22,33 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ flags }) => {
         flag.severity === 'medium' ? 'orange' : 'yellow';
       
       toast.info(
-        <div className="flex items-start justify-between w-full">
-          <div className="flex items-start">
+        <div className="flex items-center justify-between w-full gap-2">
+          <div className="flex items-center">
             <Flag className={`h-4 w-4 mr-2 text-${severityColor}-500 flex-shrink-0`} />
-            <span>{flag.text}</span>
+            <span className="text-sm">{flag.text}</span>
           </div>
         </div>,
         {
-          duration: 5000,
+          duration: 8000,
           position: "bottom-right",
           className: `border-l-4 border-${severityColor}-500`,
           dismissible: true,
           closeButton: true,
           style: { 
-            marginBottom: '8px',
+            marginBottom: '12px',
             maxWidth: '320px'
+          },
+          action: {
+            label: <X className="h-4 w-4" />,
+            onClick: () => {
+              // This is called when the close button is clicked
+            },
           },
         }
       );
       
-      setLastProcessedId(flag.id);
+      // Add this flag ID to processed IDs to avoid duplicates
+      setProcessedIds(prev => [...prev, flag.id]);
     };
 
     // Display any new flags that are added
@@ -49,11 +56,11 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ flags }) => {
       const latestFlag = flags[flags.length - 1];
       
       // Only show the notification if this flag hasn't been processed yet
-      if (lastProcessedId === null || latestFlag.id !== lastProcessedId) {
+      if (!processedIds.includes(latestFlag.id)) {
         showNewFlag(latestFlag);
       }
     }
-  }, [flags, lastProcessedId]);
+  }, [flags, processedIds]);
 
   // This component doesn't render anything, it just shows toasts
   return null;
