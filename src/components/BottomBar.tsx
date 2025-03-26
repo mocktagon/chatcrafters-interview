@@ -23,14 +23,14 @@ const BottomBar: React.FC<BottomBarProps> = ({
         {isRunning ? (
           <button 
             onClick={onPause}
-            className="bg-white rounded-full p-2.5 shadow-sm border border-interview-border hover:bg-gray-50 transition-colors"
+            className="bg-blue-500 text-white rounded-full p-2.5 shadow-sm hover:bg-blue-600 transition-colors"
           >
-            <Pause className="h-5 w-5 text-interview-darkText" />
+            <Pause className="h-5 w-5 text-white" />
           </button>
         ) : (
           <button 
             onClick={onStart}
-            className="bg-interview-green rounded-full p-2.5 shadow-sm hover:bg-opacity-90 transition-colors"
+            className="bg-blue-500 text-white rounded-full p-2.5 shadow-sm hover:bg-blue-600 transition-colors"
           >
             <Play className="h-5 w-5 text-white" fill="white" />
           </button>
@@ -38,9 +38,9 @@ const BottomBar: React.FC<BottomBarProps> = ({
         
         <button 
           onClick={onEnd}
-          className="bg-white rounded-full p-2.5 shadow-sm border border-interview-border hover:bg-gray-50 transition-colors"
+          className="bg-red-500 text-white rounded-full p-2.5 shadow-sm hover:bg-red-600 transition-colors"
         >
-          <StopCircle className="h-5 w-5 text-interview-red" />
+          <StopCircle className="h-5 w-5 text-white" />
         </button>
       </div>
       
