@@ -14,7 +14,69 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animationFrameRef = useRef<number | null>(null);
 
-  // Request camera permission
+  useEffect(() => {
+    // Automatically request permissions when component mounts
+    requestMediaPermissions();
+  }, []);
+
+  // Request both camera and mic permissions together
+  const requestMediaPermissions = async () => {
+    setIsRequestingPermission(true);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      mediaStreamRef.current = stream;
+      
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+      
+      setHasVideoPermission(true);
+      setHasMicPermission(true);
+      setIsMicEnabled(true);
+      
+      // Setup audio analyzer
+      setupAudioAnalyzer(stream);
+      
+      toast.success("Camera and microphone permissions granted");
+    } catch (error: any) {
+      console.error("Error accessing media devices:", error);
+      
+      // Try to request just video if both fail
+      if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+        tryRequestVideoOnly();
+      } else {
+        setHasVideoPermission(false);
+        setHasMicPermission(false);
+        toast.error("Media permissions denied");
+      }
+    } finally {
+      setIsRequestingPermission(false);
+    }
+  };
+
+  // Fallback to request just video permission
+  const tryRequestVideoOnly = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      mediaStreamRef.current = stream;
+      
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+      
+      setHasVideoPermission(true);
+      setHasMicPermission(false);
+      toast.success("Camera permission granted");
+      toast.warning("Microphone permission denied");
+    } catch (error) {
+      console.error("Error accessing camera:", error);
+      setHasVideoPermission(false);
+      setHasMicPermission(false);
+      toast.error("Camera permission denied");
+    }
+  };
+
+  // Request camera permission only
   const requestVideoPermission = async () => {
     setIsRequestingPermission(true);
     try {
@@ -36,7 +98,7 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
     }
   };
 
-  // Request microphone permission
+  // Request microphone permission only
   const requestMicPermission = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -153,6 +215,7 @@ export function useMediaHandler(onAudioLevelChange: (level: number) => void) {
     isRequestingPermission,
     isMicEnabled,
     videoRef,
+    requestMediaPermissions,
     requestVideoPermission,
     requestMicPermission,
     toggleMicrophone

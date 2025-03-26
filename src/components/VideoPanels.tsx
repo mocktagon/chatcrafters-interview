@@ -26,10 +26,14 @@ const VideoPanels: React.FC<VideoPanelsProps> = ({
     isRequestingPermission,
     isMicEnabled,
     videoRef,
+    requestMediaPermissions,
     requestVideoPermission,
     requestMicPermission,
     toggleMicrophone
   } = useMediaHandler(onAudioLevelChange);
+
+  // Check if we need to show the initial permission request
+  const needsInitialPermissions = hasVideoPermission === null || hasMicPermission === null;
 
   return (
     <div className="flex flex-col h-full space-y-4">
@@ -37,10 +41,10 @@ const VideoPanels: React.FC<VideoPanelsProps> = ({
       <Card className="h-1/2 glass-panel dark bg-[#111111] shadow-md border-[#333333]/20">
         <CardContent className="p-2 h-full">
           <div className="rounded-lg overflow-hidden border border-zinc-800/50 bg-black/80 h-full relative backdrop-blur-sm">
-            {hasVideoPermission === null ? (
+            {needsInitialPermissions ? (
               <PermissionRequest 
-                type="camera"
-                onRequestPermission={requestVideoPermission}
+                type="media"
+                onRequestPermission={requestMediaPermissions}
                 isRequesting={isRequestingPermission}
               />
             ) : (
