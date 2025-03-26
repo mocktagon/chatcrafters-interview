@@ -39,7 +39,11 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ flags }) => {
             maxWidth: '320px'
           },
           action: {
-            label: <X className="h-4 w-4 text-gray-700" />,
+            label: (
+              <div className="flex items-center justify-center bg-purple-500 rounded-full p-1">
+                <X className="h-3 w-3 text-white" />
+              </div>
+            ),
             onClick: () => {
               // This is called when the close button is clicked
             },
