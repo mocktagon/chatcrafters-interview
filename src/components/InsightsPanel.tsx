@@ -40,7 +40,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ flags }) => {
           },
           action: {
             label: (
-              <div className="flex items-center justify-center bg-purple-500 rounded-full p-1">
+              <div className="flex items-center justify-center bg-purple-500 rounded-full p-1.5 w-5 h-5">
                 <X className="h-3 w-3 text-white" />
               </div>
             ),
