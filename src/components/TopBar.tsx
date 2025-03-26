@@ -9,11 +9,11 @@ interface TopBarProps {
   interviewName?: string;
 }
 
-const TopBar: React.FC<TopBarProps> = ({ timer, progress = 0, interviewName = "Product Manager Interview" }) => {
+const TopBar: React.FC<TopBarProps> = ({ timer, progress = 0, interviewName = "MBA Mock Interview L2" }) => {
   return (
     <div className="h-16 px-6 flex items-center justify-between animate-fade-in bg-zinc-950 backdrop-blur-sm border-b border-zinc-800/50">
       <div className="flex items-center">
-        <div className="text-xl font-semibold text-zinc-100">
+        <div className="text-lg font-semibold text-zinc-100">
           {interviewName}
         </div>
       </div>
@@ -32,7 +32,7 @@ const TopBar: React.FC<TopBarProps> = ({ timer, progress = 0, interviewName = "P
         </button>
         <div className="flex items-center space-x-2 text-zinc-100 bg-zinc-950 px-3 py-1.5 rounded-full border border-zinc-800/50">
           <Clock className="h-4 w-4" />
-          <span className="font-medium">{timer}</span>
+          <span className="text-sm font-medium">{timer}</span>
         </div>
       </div>
     </div>

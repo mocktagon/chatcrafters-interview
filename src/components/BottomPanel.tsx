@@ -31,6 +31,15 @@ const BottomPanel: React.FC<BottomPanelProps> = ({
       position: "bottom-right"
     });
   };
+  
+  const handleToggleMic = () => {
+    onToggleMic();
+  };
+  
+  const handleToggleCamera = () => {
+    onToggleCamera();
+    toast.info(isCameraEnabled ? "Camera disabled" : "Camera enabled");
+  };
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-zinc-950/90 backdrop-blur border-t border-zinc-800 py-3 px-6 z-10">
@@ -38,7 +47,7 @@ const BottomPanel: React.FC<BottomPanelProps> = ({
         <div className="flex items-center space-x-4">
           <Toggle
             pressed={isMicEnabled}
-            onClick={onToggleMic}
+            onClick={handleToggleMic}
             className={`rounded-full h-10 w-10 ${!isMicEnabled ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30 border-red-500/50' : 'bg-zinc-800 hover:bg-zinc-700 border-zinc-700'}`}
             aria-label={isMicEnabled ? "Mute microphone" : "Unmute microphone"}
           >
@@ -51,7 +60,7 @@ const BottomPanel: React.FC<BottomPanelProps> = ({
           
           <Toggle
             pressed={isCameraEnabled}
-            onClick={onToggleCamera}
+            onClick={handleToggleCamera}
             className={`rounded-full h-10 w-10 ${!isCameraEnabled ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30 border-red-500/50' : 'bg-zinc-800 hover:bg-zinc-700 border-zinc-700'}`}
             aria-label={isCameraEnabled ? "Turn off camera" : "Turn on camera"}
           >

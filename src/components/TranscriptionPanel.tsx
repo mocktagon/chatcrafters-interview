@@ -31,7 +31,7 @@ const TranscriptionPanel: React.FC<TranscriptionPanelProps> = ({
         <div className="flex justify-end pt-3">
           <Button 
             onClick={onNext} 
-            className="bg-zinc-800 hover:bg-zinc-700 text-zinc-100"
+            className="bg-purple-600 hover:bg-purple-700 text-zinc-100"
             size="sm"
           >
             Next <ChevronRight className="ml-1 h-4 w-4" />

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import TopBar from '@/components/TopBar';
 import VideoPanels from '@/components/VideoPanels';
@@ -11,7 +10,7 @@ import { toast } from 'sonner';
 
 const Index = () => {
   const [isCameraEnabled, setIsCameraEnabled] = useState(true);
-  const [interviewName] = useState("Product Manager Interview");
+  const [interviewName] = useState("MBA Mock Interview L2");
 
   const {
     isRunning,
@@ -58,7 +57,6 @@ const Index = () => {
       <TopBar timer={timer} progress={progress} interviewName={interviewName} />
       
       <div className="flex-grow p-4 grid grid-cols-12 gap-4">
-        {/* First column: Video displays stacked vertically (4 cols) */}
         <div className="col-span-4">
           <VideoPanels 
             isRunning={isRunning} 
@@ -70,7 +68,6 @@ const Index = () => {
           />
         </div>
         
-        {/* Second column: Transcriptions (Enlarged) (8 cols) */}
         <div className="col-span-8">
           <TranscriptionPanel 
             transcripts={transcripts} 
@@ -80,7 +77,6 @@ const Index = () => {
         </div>
       </div>
       
-      {/* Bottom panel with controls */}
       <BottomPanel 
         isRunning={isRunning}
         audioLevel={audioLevel}
@@ -91,7 +87,6 @@ const Index = () => {
         onEnd={handleEnd}
       />
       
-      {/* Invisible component that handles showing insight toasts */}
       <InsightsPanel flags={flags} />
     </div>
   );
