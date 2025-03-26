@@ -23,7 +23,7 @@ const Transcription: React.FC<TranscriptionProps> = ({ transcripts, keywords = [
       </h3>
       <div 
         ref={scrollRef}
-        className="h-[220px] overflow-y-auto custom-scrollbar bg-zinc-900 rounded-lg p-3"
+        className="h-[220px] overflow-y-auto custom-scrollbar bg-zinc-950 rounded-lg p-3"
       >
         {transcripts.length === 0 ? (
           <div className="flex h-full items-center justify-center text-zinc-500 text-sm">

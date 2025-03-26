@@ -33,7 +33,7 @@ const BottomPanel: React.FC<BottomPanelProps> = ({
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur border-t border-zinc-800 py-3 px-6 z-10">
+    <div className="fixed bottom-0 left-0 right-0 bg-zinc-950/90 backdrop-blur border-t border-zinc-800 py-3 px-6 z-10">
       <div className="container mx-auto flex items-center justify-center">
         <div className="flex items-center space-x-4">
           <Toggle
@@ -66,7 +66,7 @@ const BottomPanel: React.FC<BottomPanelProps> = ({
             onClick={handleEnd}
             variant="default"
             size="icon"
-            className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white transition-all shadow-sm h-12 w-12 rounded-full"
+            className="bg-red-600 hover:bg-red-700 text-white transition-all shadow-sm h-12 w-12 rounded-full"
           >
             <StopCircle className="w-6 h-6 stroke-[2.5px]" />
             <span className="sr-only">End Interview</span>

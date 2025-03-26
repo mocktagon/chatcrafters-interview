@@ -20,7 +20,7 @@ const TranscriptionPanel: React.FC<TranscriptionPanelProps> = ({
   return (
     <Card className="h-full glass-panel bg-zinc-900 border-zinc-800 shadow-md">
       <CardHeader className="pb-0">
-        <CardTitle className="text-xl font-semibold">
+        <CardTitle className="text-xl font-semibold text-zinc-100">
           Conversation
         </CardTitle>
       </CardHeader>
@@ -31,7 +31,7 @@ const TranscriptionPanel: React.FC<TranscriptionPanelProps> = ({
         <div className="flex justify-end pt-4">
           <Button 
             onClick={onNext} 
-            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
+            className="bg-zinc-800 hover:bg-zinc-700 text-zinc-100"
             size="sm"
           >
             Next <ChevronRight className="ml-1 h-4 w-4" />
