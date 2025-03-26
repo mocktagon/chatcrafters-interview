@@ -25,7 +25,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ flags }) => {
         <div className="flex items-center justify-between w-full gap-2">
           <div className="flex items-center">
             <Flag className={`h-4 w-4 mr-2 text-${severityColor}-500 flex-shrink-0`} />
-            <span className="text-sm">{flag.text}</span>
+            <span className="text-sm text-black">{flag.text}</span>
           </div>
         </div>,
         {
@@ -39,7 +39,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ flags }) => {
             maxWidth: '320px'
           },
           action: {
-            label: <X className="h-4 w-4" />,
+            label: <X className="h-4 w-4 text-gray-700" />,
             onClick: () => {
               // This is called when the close button is clicked
             },

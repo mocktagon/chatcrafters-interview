@@ -17,10 +17,11 @@ const App = () => (
         position="bottom-right"
         toastOptions={{
           style: {
-            background: "rgba(20, 20, 30, 0.95)",
-            color: "white",
-            border: "1px solid rgba(88, 88, 100, 0.4)",
+            background: "#FFFFFF",
+            color: "#000000",
+            border: "1px solid rgba(200, 200, 200, 0.4)",
             minWidth: "280px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
           },
           className: "my-toast-class",
         }}
