@@ -11,7 +11,12 @@ export function useInterviewState() {
   const [progress, setProgress] = useState(0);
   const [audioLevel, setAudioLevel] = useState(0);
   const [interviewType] = useState('behavioral');
-  const [transcripts, setTranscripts] = useState<Transcript[]>([]);
+  const [transcripts, setTranscripts] = useState<Transcript[]>([{
+    id: 1,
+    text: "Tell me about a challenging project you've worked on and how you overcame obstacles.",
+    speaker: 'ai',
+    timestamp: '00:00'
+  }]);
   const [flags, setFlags] = useState<Flag[]>([]);
   const [sentiment, setSentiment] = useState<SentimentType>('neutral');
   const [keywords, setKeywords] = useState<string[]>([]);
@@ -84,7 +89,12 @@ export function useInterviewState() {
     setSeconds(0);
     setTimer('00:00');
     setProgress(0);
-    setTranscripts([]);
+    setTranscripts([{
+      id: 1,
+      text: "Tell me about a challenging project you've worked on and how you overcame obstacles.",
+      speaker: 'ai',
+      timestamp: '00:00'
+    }]);
     setFlags([]);
   };
 
