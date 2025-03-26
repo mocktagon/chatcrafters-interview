@@ -40,8 +40,8 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({ flags }) => {
           },
           action: {
             label: (
-              <div className="bg-gray-100 hover:bg-gray-200 transition-colors px-2 py-1 rounded">
-                <X className="h-4 w-4 text-gray-700" />
+              <div className="bg-neutral-200 hover:bg-neutral-300 transition-colors px-3 py-1.5 rounded-md shadow-sm">
+                <X className="h-5 w-5 text-neutral-700" />
               </div>
             ),
             onClick: () => {
