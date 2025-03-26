@@ -29,7 +29,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
   return (
     <div className="flex flex-col h-full gap-4">
       {/* Top panel - Controls */}
-      <Card className="glass-panel dark bg-[#1A1F2C] border border-[#7E69AB]/20 shadow-md">
+      <Card className="glass-panel dark bg-[#111111] border border-[#333333]/20 shadow-md">
         <CardContent className="p-4">
           <h3 className="text-md font-semibold flex items-center text-slate-200 mb-4">
             Interview Controls
@@ -41,7 +41,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                 onClick={isRunning ? onPause : onStart}
                 className={isRunning 
                   ? "bg-amber-600 hover:bg-amber-700 transition-all duration-300 flex-1" 
-                  : "bg-gradient-to-r from-[#9b87f5] to-[#7E69AB] hover:from-[#8a76e4] hover:to-[#6d5a9c] transition-all duration-300 shadow-[0_4px_12px_rgba(155,135,245,0.3)] flex-1"}
+                  : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 transition-all duration-300 shadow-[0_4px_12px_rgba(245,158,11,0.3)] flex-1"}
                 size="lg"
               >
                 {isRunning ? (
@@ -73,7 +73,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
                       style={{ 
                         height: `${8 + level * 3}px`,
                         backgroundColor: level <= audioLevel ? (
-                          level > 3 ? '#FF3B30' : level > 1 ? '#9b87f5' : '#9b87f5'
+                          level > 3 ? '#FF3B30' : level > 1 ? '#f59e0b' : '#f59e0b'
                         ) : 'rgba(100, 116, 139, 0.4)'
                       }}
                     />
@@ -86,14 +86,14 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
       </Card>
       
       {/* Bottom panel - Red Flags */}
-      <Card className="glass-panel dark bg-[#1A1F2C] flex-grow border border-[#7E69AB]/20 shadow-md">
+      <Card className="glass-panel dark bg-[#111111] flex-grow border border-[#333333]/20 shadow-md">
         <CardContent className="p-4 h-full">
           <h3 className="text-md font-semibold flex items-center text-slate-200 mb-3">
             <Flag className="w-4 h-4 mr-2 text-interview-red" />
             Interview Insights
           </h3>
           <ScrollArea className="h-[calc(100%-2rem)]">
-            <div className="bg-slate-800/60 rounded-lg p-4 border border-slate-700/50 min-h-[90%] backdrop-blur-sm">
+            <div className="bg-black/60 rounded-lg p-4 border border-zinc-800/50 min-h-[90%] backdrop-blur-sm">
               {flags.length === 0 ? (
                 <div className="flex h-full items-center justify-center text-slate-500 text-sm">
                   Interview insights will appear here...

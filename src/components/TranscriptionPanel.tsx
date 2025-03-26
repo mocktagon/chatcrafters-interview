@@ -16,14 +16,14 @@ interface TranscriptionPanelProps {
 
 const TranscriptionPanel: React.FC<TranscriptionPanelProps> = ({ transcripts, keywords }) => {
   return (
-    <Card className="h-full glass-panel dark bg-[#1A1F2C] border border-[#7E69AB]/20 shadow-md">
+    <Card className="h-full glass-panel dark bg-[#111111] border border-[#333333]/20 shadow-md">
       <CardContent className="p-4 h-full">
         <h3 className="text-md font-semibold text-slate-200 mb-3 flex items-center">
-          <Activity className="w-4 h-4 mr-2 text-[#9b87f5]" />
+          <Activity className="w-4 h-4 mr-2 text-amber-400" />
           Conversation
         </h3>
         <ScrollArea className="h-[calc(100%-2rem)]">
-          <div className="bg-slate-800/60 rounded-lg p-4 border border-slate-700/50 min-h-[90%] backdrop-blur-sm">
+          <div className="bg-black/60 rounded-lg p-4 border border-zinc-800/50 min-h-[90%] backdrop-blur-sm">
             {transcripts.length === 0 ? (
               <div className="flex h-full items-center justify-center text-slate-500 text-sm">
                 Interview transcription will appear here...
@@ -36,17 +36,17 @@ const TranscriptionPanel: React.FC<TranscriptionPanelProps> = ({ transcripts, ke
                       <div className="flex items-center">
                         {item.speaker === 'ai' ? (
                           <div className="flex items-center">
-                            <div className="w-6 h-6 rounded-full bg-[#9b87f5]/10 flex items-center justify-center mr-2">
-                              <Bot className="w-3 h-3 text-[#9b87f5]" />
+                            <div className="w-6 h-6 rounded-full bg-amber-500/10 flex items-center justify-center mr-2">
+                              <Bot className="w-3 h-3 text-amber-400" />
                             </div>
-                            <span className="text-sm font-medium text-[#9b87f5]">AI Interviewer</span>
+                            <span className="text-sm font-medium text-amber-400">AI Interviewer</span>
                           </div>
                         ) : (
                           <div className="flex items-center">
-                            <div className="w-6 h-6 rounded-full bg-interview-green/10 flex items-center justify-center mr-2">
-                              <User className="w-3 h-3 text-interview-green" />
+                            <div className="w-6 h-6 rounded-full bg-purple-500/10 flex items-center justify-center mr-2">
+                              <User className="w-3 h-3 text-purple-400" />
                             </div>
-                            <span className="text-sm font-medium text-interview-green">You</span>
+                            <span className="text-sm font-medium text-purple-400">You</span>
                           </div>
                         )}
                       </div>
@@ -58,7 +58,7 @@ const TranscriptionPanel: React.FC<TranscriptionPanelProps> = ({ transcripts, ke
                     {keywords.length > 0 && item.speaker === 'user' && (
                       <div className="mt-2 flex flex-wrap gap-1 pl-8">
                         {keywords.map((keyword, idx) => (
-                          <span key={idx} className="text-xs px-2 py-1 rounded-full bg-[#7E69AB]/20 text-[#D6BCFA] border border-[#7E69AB]/10">
+                          <span key={idx} className="text-xs px-2 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/10">
                             #{keyword}
                           </span>
                         ))}
