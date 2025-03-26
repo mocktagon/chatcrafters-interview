@@ -16,10 +16,10 @@ interface TranscriptionPanelProps {
 
 const TranscriptionPanel: React.FC<TranscriptionPanelProps> = ({ transcripts, keywords }) => {
   return (
-    <Card className="h-full glass-panel dark">
+    <Card className="h-full glass-panel dark bg-[#1A1F2C]">
       <CardContent className="p-4 h-full">
         <h3 className="text-md font-semibold text-slate-200 mb-3 flex items-center">
-          <Activity className="w-4 h-4 mr-2 text-interview-blue" />
+          <Activity className="w-4 h-4 mr-2 text-[#9b87f5]" />
           Conversation
         </h3>
         <ScrollArea className="h-[calc(100%-2rem)]">
@@ -34,7 +34,7 @@ const TranscriptionPanel: React.FC<TranscriptionPanelProps> = ({ transcripts, ke
                   <div key={item.id} className="animate-scale-in">
                     <div className="flex justify-between items-center mb-2">
                       <span className={`text-sm font-medium ${
-                        item.speaker === 'ai' ? 'text-interview-blue' : 'text-interview-green'
+                        item.speaker === 'ai' ? 'text-[#9b87f5]' : 'text-interview-green'
                       }`}>
                         {item.speaker === 'ai' ? 'AI Interviewer' : 'You'}
                       </span>
@@ -46,7 +46,7 @@ const TranscriptionPanel: React.FC<TranscriptionPanelProps> = ({ transcripts, ke
                     {keywords.length > 0 && item.speaker === 'user' && (
                       <div className="mt-2 flex flex-wrap gap-1">
                         {keywords.map((keyword, idx) => (
-                          <span key={idx} className="text-xs px-2 py-1 rounded-full bg-blue-600/20 text-blue-400">
+                          <span key={idx} className="text-xs px-2 py-1 rounded-full bg-[#7E69AB]/20 text-[#D6BCFA]">
                             #{keyword}
                           </span>
                         ))}
