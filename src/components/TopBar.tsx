@@ -6,14 +6,15 @@ import { Progress } from "@/components/ui/progress";
 interface TopBarProps {
   timer: string;
   progress?: number;
+  interviewName?: string;
 }
 
-const TopBar: React.FC<TopBarProps> = ({ timer, progress = 0 }) => {
+const TopBar: React.FC<TopBarProps> = ({ timer, progress = 0, interviewName = "Product Manager Interview" }) => {
   return (
     <div className="h-16 px-6 flex items-center justify-between animate-fade-in bg-black/70 backdrop-blur-sm border-b border-zinc-800/50">
       <div className="flex items-center">
         <div className="text-xl font-semibold text-white">
-          Interview<span className="text-amber-400">AI</span>
+          {interviewName}
         </div>
       </div>
       

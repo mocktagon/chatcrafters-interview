@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 
 const Index = () => {
   const [isCameraEnabled, setIsCameraEnabled] = useState(true);
+  const [interviewName] = useState("Product Manager Interview");
 
   const {
     isRunning,
@@ -54,7 +55,7 @@ const Index = () => {
   
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-black via-black to-zinc-900 text-white pb-16">
-      <TopBar timer={timer} progress={progress} />
+      <TopBar timer={timer} progress={progress} interviewName={interviewName} />
       
       <div className="flex-grow p-4 grid grid-cols-12 gap-4">
         {/* First column: Video displays stacked vertically (4 cols) */}

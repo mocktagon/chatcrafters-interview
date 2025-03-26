@@ -24,19 +24,11 @@ const TranscriptionPanel: React.FC<TranscriptionPanelProps> = ({
   return (
     <Card className="h-full glass-panel dark bg-[#111111] border border-[#333333]/20 shadow-md">
       <CardContent className="p-4 h-full flex flex-col">
-        <div className="flex justify-between items-center mb-3">
+        <div className="mb-3">
           <h3 className="text-md font-semibold text-slate-200 flex items-center">
             <Activity className="w-4 h-4 mr-2 text-amber-400" />
             Conversation
           </h3>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="border-amber-500/30 text-amber-400 hover:bg-amber-500/10"
-            onClick={onNext}
-          >
-            Next <ArrowRight className="ml-1 w-3 h-3" />
-          </Button>
         </div>
         <ScrollArea className="flex-grow">
           <div className="bg-black/60 rounded-lg p-4 border border-zinc-800/50 min-h-[90%] backdrop-blur-sm">
@@ -86,6 +78,16 @@ const TranscriptionPanel: React.FC<TranscriptionPanelProps> = ({
             )}
           </div>
         </ScrollArea>
+        <div className="mt-3 flex justify-end">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="border-amber-500/30 text-amber-400 hover:bg-amber-500/10"
+            onClick={onNext}
+          >
+            Next <ArrowRight className="ml-1 w-3 h-3" />
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
