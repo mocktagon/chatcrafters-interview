@@ -18,7 +18,7 @@ const TranscriptionPanel: React.FC<TranscriptionPanelProps> = ({
   onNext
 }) => {
   return (
-    <Card className="h-full glass-panel dark bg-[#111111] shadow-md border-[#333333]/20">
+    <Card className="h-full glass-panel shadow-md">
       <CardHeader className="pb-0">
         <CardTitle className="text-xl font-semibold">
           Conversation
