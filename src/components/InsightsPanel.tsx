@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -38,7 +39,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
             <div className="flex gap-3">
               <Button 
                 onClick={isRunning ? onPause : onStart}
-                variant={isRunning ? "secondary" : "default"}
+                variant="default"
                 size="lg"
                 className={isRunning 
                   ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white transition-all flex-1" 
@@ -53,7 +54,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({
               
               <Button 
                 onClick={onEnd}
-                variant="destructive"
+                variant="default"
                 size="lg"
                 className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white transition-all shadow-sm flex-1"
               >
