@@ -16,13 +16,13 @@ const TopBar: React.FC<TopBarProps> = ({ timer }) => {
       </div>
       
       <div className="flex items-center space-x-4">
-        <button className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 transition-colors">
+        <button className="p-2 rounded-full hover:bg-zinc-800 transition-colors">
           <BarChart className="h-5 w-5 text-white" />
         </button>
-        <button className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 transition-colors">
+        <button className="p-2 rounded-full hover:bg-zinc-800 transition-colors">
           <Download className="h-5 w-5 text-white" />
         </button>
-        <button className="p-2 rounded-full bg-red-500 hover:bg-red-600 transition-colors">
+        <button className="p-2 rounded-full hover:bg-zinc-800 transition-colors">
           <Settings className="h-5 w-5 text-white" />
         </button>
         <div className="flex items-center space-x-2 text-white bg-black/60 px-3 py-1.5 rounded-full border border-zinc-800/50">
