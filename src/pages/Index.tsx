@@ -54,10 +54,10 @@ const Index = () => {
   };
   
   return (
-    <div className="min-h-screen flex flex-col bg-purple-900 text-white pb-16">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-indigo-900 via-purple-800 to-violet-900 text-white pb-16">
       <TopBar timer={timer} progress={progress} interviewName={interviewName} />
       
-      <div className="flex-grow p-4 grid grid-cols-12 gap-4">
+      <div className="flex-grow p-6 grid grid-cols-12 gap-6">
         {/* First column: Video displays stacked vertically (4 cols) */}
         <div className="col-span-4">
           <VideoPanels 

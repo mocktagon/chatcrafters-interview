@@ -11,14 +11,14 @@ interface TopBarProps {
 
 const TopBar: React.FC<TopBarProps> = ({ timer, progress = 0, interviewName = "Product Manager Interview" }) => {
   return (
-    <div className="h-16 px-6 flex items-center justify-between animate-fade-in bg-zinc-950 backdrop-blur-sm border-b border-zinc-800/50">
+    <div className="h-16 px-8 flex items-center justify-between animate-fade-in bg-zinc-950 backdrop-blur-sm border-b border-zinc-800/50">
       <div className="flex items-center">
         <div className="text-xl font-semibold text-zinc-100">
           {interviewName}
         </div>
       </div>
       
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-5">
         <div className="flex items-center space-x-3 w-80">
           <Progress 
             value={35} 
