@@ -4,15 +4,19 @@ import TopBar from '@/components/TopBar';
 import BottomBar from '@/components/BottomBar';
 import ControlPanel from '@/components/ControlPanel';
 import VideoDisplay from '@/components/VideoDisplay';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Card, CardContent } from '@/components/ui/card';
 
 const Index = () => {
-  const [interviewType, setInterviewType] = useState('behavioral');
-  const [useAiAvatar, setUseAiAvatar] = useState(true);
   const [isRunning, setIsRunning] = useState(false);
   const [timer, setTimer] = useState('00:00');
   const [seconds, setSeconds] = useState(0);
   const [progress, setProgress] = useState(0);
   const [audioLevel, setAudioLevel] = useState(0);
+  
+  // Fixed interview type - no longer selectable
+  const interviewType = 'behavioral';
   
   // Sample transcript data
   const [transcripts, setTranscripts] = useState<Array<{
@@ -178,30 +182,149 @@ const Index = () => {
     <div className="min-h-screen flex flex-col bg-interview-lightBg">
       <TopBar timer={timer} />
       
-      <div className="flex-grow flex">
-        {/* Left panel */}
-        <div className="w-1/3 p-4 border-r border-interview-border">
-          <div className="h-full glass-panel p-1">
-            <ControlPanel
-              interviewType={interviewType}
-              setInterviewType={setInterviewType}
-              useAiAvatar={useAiAvatar}
-              setUseAiAvatar={setUseAiAvatar}
-              transcripts={transcripts}
-              flags={flags}
-            />
-          </div>
-        </div>
-        
-        {/* Right panel */}
-        <div className="w-2/3 p-4">
-          <div className="h-full glass-panel p-1">
-            <VideoDisplay 
-              useAiAvatar={useAiAvatar}
-              progress={progress}
-            />
-          </div>
-        </div>
+      <div className="flex-grow p-4">
+        <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-8rem)]">
+          {/* Left panel - Candidate Video */}
+          <ResizablePanel defaultSize={25} minSize={20}>
+            <Card className="h-full glass-panel overflow-hidden">
+              <CardContent className="p-2 h-full">
+                <div className="rounded-lg overflow-hidden border border-interview-border bg-gray-50 h-full relative">
+                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100">
+                    <div className="text-center">
+                      <div className="w-24 h-24 rounded-full bg-interview-blue/10 flex items-center justify-center mx-auto">
+                        <VideoDisplay useAiAvatar={false} progress={0} />
+                      </div>
+                      <p className="text-interview-darkText text-sm font-medium mt-4">You</p>
+                      <p className="text-interview-lightText text-xs">Camera preview</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </ResizablePanel>
+          
+          <ResizableHandle withHandle />
+          
+          {/* Second panel - AI Avatar */}
+          <ResizablePanel defaultSize={25} minSize={20}>
+            <Card className="h-full glass-panel overflow-hidden">
+              <CardContent className="p-2 h-full">
+                <div className="rounded-lg overflow-hidden border border-interview-border bg-gray-50 h-full relative">
+                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100">
+                    <div className="text-center">
+                      <div className="w-24 h-24 rounded-full bg-interview-blue/10 flex items-center justify-center mx-auto animate-pulse-subtle">
+                        <VideoDisplay useAiAvatar={true} progress={progress} />
+                      </div>
+                      <p className="text-interview-darkText text-sm font-medium mt-4">AI Interviewer</p>
+                      <p className="text-interview-lightText text-xs">
+                        {isRunning ? "Speaking..." : "Waiting to start"}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Progress bar */}
+                  <div className="absolute bottom-0 left-0 right-0 progress-bar">
+                    <div 
+                      className="progress-bar-inner" 
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </ResizablePanel>
+          
+          <ResizableHandle withHandle />
+          
+          {/* Third panel - Transcriptions (Enlarged) */}
+          <ResizablePanel defaultSize={30} minSize={25}>
+            <Card className="h-full glass-panel overflow-hidden">
+              <CardContent className="p-4 h-full">
+                <h3 className="text-md font-semibold text-interview-darkText mb-3">
+                  Transcription
+                </h3>
+                <ScrollArea className="h-[calc(100%-2rem)]">
+                  <div className="bg-white/60 rounded-lg p-4 border border-interview-border min-h-[90%]">
+                    {transcripts.length === 0 ? (
+                      <div className="flex h-full items-center justify-center text-interview-lightText text-sm">
+                        Interview transcription will appear here...
+                      </div>
+                    ) : (
+                      <div className="space-y-5">
+                        {transcripts.map((item) => (
+                          <div key={item.id} className="animate-scale-in">
+                            <div className="flex justify-between items-center mb-2">
+                              <span className={`text-sm font-medium ${
+                                item.speaker === 'ai' ? 'text-interview-blue' : 'text-interview-green'
+                              }`}>
+                                {item.speaker === 'ai' ? 'AI Interviewer' : 'You'}
+                              </span>
+                              <span className="text-xs text-interview-lightText">{item.timestamp}</span>
+                            </div>
+                            <p className="text-base text-interview-darkText leading-relaxed">
+                              {item.text}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </ResizablePanel>
+          
+          <ResizableHandle withHandle />
+          
+          {/* Fourth panel - Red Flags and Insights */}
+          <ResizablePanel defaultSize={20} minSize={15}>
+            <Card className="h-full glass-panel overflow-hidden">
+              <CardContent className="p-4 h-full">
+                <h3 className="text-md font-semibold flex items-center text-interview-darkText mb-3">
+                  <span className="h-3.5 w-3.5 mr-1.5 text-interview-red">🚩</span>
+                  Insights
+                </h3>
+                <ScrollArea className="h-[calc(100%-2rem)]">
+                  <div className="bg-white/60 rounded-lg p-4 border border-interview-border min-h-[90%]">
+                    {flags.length === 0 ? (
+                      <div className="flex h-full items-center justify-center text-interview-lightText text-sm">
+                        Interview insights will appear here...
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {flags.map((flag) => (
+                          <div 
+                            key={flag.id} 
+                            className="p-3 rounded-md animate-scale-in"
+                            style={{
+                              backgroundColor: 
+                                flag.severity === 'high' ? 'rgba(255, 59, 48, 0.1)' :
+                                flag.severity === 'medium' ? 'rgba(255, 149, 0, 0.1)' :
+                                'rgba(255, 204, 0, 0.1)'
+                            }}
+                          >
+                            <div className="flex items-start">
+                              <div
+                                className="w-2 h-2 mt-1.5 rounded-full mr-2 flex-shrink-0"
+                                style={{
+                                  backgroundColor:
+                                    flag.severity === 'high' ? '#FF3B30' :
+                                    flag.severity === 'medium' ? '#FF9500' :
+                                    '#FFCC00'
+                                }}
+                              />
+                              <p className="text-sm text-interview-darkText">{flag.text}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
       
       <BottomBar
