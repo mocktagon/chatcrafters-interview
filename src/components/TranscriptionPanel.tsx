@@ -1,0 +1,66 @@
+
+import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Activity } from 'lucide-react';
+
+interface TranscriptionPanelProps {
+  transcripts: Array<{
+    id: number;
+    text: string;
+    speaker: 'ai' | 'user';
+    timestamp: string;
+  }>;
+  keywords: string[];
+}
+
+const TranscriptionPanel: React.FC<TranscriptionPanelProps> = ({ transcripts, keywords }) => {
+  return (
+    <Card className="h-full glass-panel dark">
+      <CardContent className="p-4 h-full">
+        <h3 className="text-md font-semibold text-slate-200 mb-3 flex items-center">
+          <Activity className="w-4 h-4 mr-2 text-interview-blue" />
+          Conversation
+        </h3>
+        <ScrollArea className="h-[calc(100%-2rem)]">
+          <div className="bg-slate-800/60 rounded-lg p-4 border border-slate-700 min-h-[90%]">
+            {transcripts.length === 0 ? (
+              <div className="flex h-full items-center justify-center text-slate-500 text-sm">
+                Interview transcription will appear here...
+              </div>
+            ) : (
+              <div className="space-y-5">
+                {transcripts.map((item) => (
+                  <div key={item.id} className="animate-scale-in">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className={`text-sm font-medium ${
+                        item.speaker === 'ai' ? 'text-interview-blue' : 'text-interview-green'
+                      }`}>
+                        {item.speaker === 'ai' ? 'AI Interviewer' : 'You'}
+                      </span>
+                      <span className="text-xs text-slate-500">{item.timestamp}</span>
+                    </div>
+                    <p className="text-base text-slate-300 leading-relaxed">
+                      {item.text}
+                    </p>
+                    {keywords.length > 0 && item.speaker === 'user' && (
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {keywords.map((keyword, idx) => (
+                          <span key={idx} className="text-xs px-2 py-1 rounded-full bg-blue-600/20 text-blue-400">
+                            #{keyword}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </ScrollArea>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default TranscriptionPanel;
