@@ -1,5 +1,5 @@
 
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { Transcript } from '@/types/interview';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -9,26 +9,16 @@ interface TranscriptionProps {
 }
 
 const Transcription: React.FC<TranscriptionProps> = ({ transcripts, keywords = [] }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [transcripts]);
-  
   return (
-    <div className="animate-fade-in h-full flex flex-col">
+    <div className="animate-fade-in">
       <h3 className="text-sm font-semibold text-zinc-300 mb-2">
         Transcription
       </h3>
-      <div 
-        ref={scrollRef}
-        className="flex-1 overflow-y-auto custom-scrollbar bg-zinc-950 rounded-lg p-3"
-      >
+      <div className="space-y-3">
         {transcripts.length === 0 ? (
-          <div className="flex h-full items-center justify-center text-zinc-500 text-sm">
+          <div className="flex h-24 items-center justify-center text-zinc-500 text-sm">
             Interview transcription will appear here...
           </div>
         ) : (
